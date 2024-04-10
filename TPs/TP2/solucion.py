@@ -10,35 +10,31 @@ for _ in range(T):
     widths_temp = [int(x) for x in input().split()]
     widths.append(widths_temp)
     
-def skyline_incr(i, width):
-    if i == 0 or width == 0: # Si recorri todo el skyline
+def skyline_incr(i, last_height, total_width):
+    if i == N: # Si recorri todo el skyline
         return 0
     
-    if M_incr[i][width] == []: # Si no tengo asignado valor en memoria, lo calculo
+    if M_incr[i][total_width] == -1:
 
-        # if i == 1:
-        #     return widths[0][i-1]
-        # else:
-
-        if heights[0][i-2] <= heights[0][i-1]: # Verifico si el skyline es increasing
+        if heights[0][i] > last_height: # Verifico si el skyline es increasing
 
             # Asigno el maximo entre las recursiones de excluir o incluir el elemento
-            M_incr[i][width] = max(skyline_incr(i-1, width), skyline_incr(i-1, width - widths[0][i-1]) + widths[0][i-1])
+            M_incr[i][total_width] = max(skyline_incr(i+1, last_height, total_width), skyline_incr(i+1, heights[0][i], total_width + widths[0][i]) + widths[0][i])
 
         else: # De no ser increasing, sigo recorriendo
-            M_incr[i][width] = skyline_incr(i-1, width)    
+            M_incr[i][total_width] = skyline_incr(i+1, last_height, total_width)    
 
-    return M_incr[i][width]
+    return M_incr[i][total_width]
 
 N = len(widths[0])
 
 widths_sum = sum(widths[0])
 
 # Inicializo memoria 
-M_incr = [[] * (widths_sum + 1) for _ in range(N + 1)]
-M_decr = [[] * (widths_sum + 1) for _ in range(N + 1)]
+M_incr = [[-1] * (widths_sum + 1) for _ in range(N + 1)]
+M_decr = [[-1] * (widths_sum + 1) for _ in range(N + 1)]
 
-max_incr_length = skyline_incr(N, widths_sum)
+max_incr_length = skyline_incr(0, float('-inf'), 0)
 
 print(M_incr)
 print(max_incr_length)
