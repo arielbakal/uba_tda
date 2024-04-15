@@ -2,9 +2,9 @@
 
 #### Trabajos Prácticos*
 
-| TP | Enunciado | Solución | Estado |
-|-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - |
-| 1: Backtracking | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP1/enunciado.pdf) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP1/solucion.py) | Approved |
-| 2: Top-Down (PD) | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP2/enunciado.pdf) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP2/solucion.py) | Time Limit Exceeded |
+| TP | Enunciado | Solución | Lenguaje | Estado |
+|-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - |
+| 1: Backtracking | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP1/enunciado.pdf) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP1/solucion.py) | Python | Approved |
+| 2: Top-Down (PD) | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP2/enunciado.pdf) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP2/solucion.py) | C++ | Approved |
 
 *Los TPs son problemas publicados en [vjudge](https://vjudge.net/)
