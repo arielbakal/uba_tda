@@ -3,7 +3,7 @@
 using namespace std;
 
 // NOTES
-// i'll probably need to save in each tree<accorn> vector the amount of accorns at first position, 
+// i'll probably need to save in each tree<acorn> vector the amount of acorns at first position, 
 // to know how many iteration i've to do, also to get O(1) accesing that var
 
 struct Forest {
@@ -11,7 +11,7 @@ struct Forest {
 };
 
 vector<Forest> forest_features; // contains (t, h, f) for each forest
-vector<vector<vector<int>>> forest; // contains accorns heights for each tree for each forest (forest<tree<accorn>>)
+vector<vector<vector<int>>> forest; // contains acorns heights for each tree for each forest (forest<tree<acorn>>)
 
 int main() {
     int C;
@@ -35,14 +35,14 @@ int main() {
             int a;
             cin >> a;
 
-            vector<int> accorns_t_tree(a);
+            vector<int> acorns_t_tree(a);
 
-            // iterate over a accorns
+            // iterate over a acorns
             for (int k=0; k<a; k++) {
-                cin >> accorns_t_tree[k];
+                cin >> acorns_t_tree[k];
             }
 
-            trees_temp.push_back(accorns_t_tree);
+            trees_temp.push_back(acorns_t_tree);
         }
 
         forest.push_back(trees_temp);
