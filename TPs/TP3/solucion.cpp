@@ -2,6 +2,10 @@
 #include <vector>
 using namespace std;
 
+// NOTES
+// i'll probably need to save in each tree<accorn> vector the amount of accorns at first position, 
+// to know how many iteration i've to do, also to get O(1) accesing that var
+
 struct Forest {
     int t, h, f;
 };
