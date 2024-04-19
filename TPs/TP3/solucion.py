@@ -2,6 +2,11 @@
 # i'll probably need to save in each tree<acorn> vector the amount of acorns at first position, 
 # to know how many iteration i've to do, also to get O(1) accesing that var
 
+import sys
+
+# Set the recursion limit to a higher value
+sys.setrecursionlimit(2100)  # Set the limit to 10,000 recursions
+
 class Forest:
     def __init__(self, t, h, f):
         self.t = t
