@@ -21,24 +21,29 @@ def acorns_at_height(t, h, c):
             acorns += 1
     return acorns
 
-def acorn_pd(t, f, c, M):
+def acorn_pd(f, c):
+    M = [[0] * (forest_features[c].h + 1) for _ in range(forest_features[c].t)]
+    M_max = [0] * (forest_features[c].h + 1)
+
+    for tree in range(forest_features[c].t):
+        for acorn_height in forest[c][tree]:
+            M[tree][acorn_height] += 1
 
     # Iterate bottom-up
-    for h in range(1, forest_features[c].h + 1):
-        if h == 1:
-            M[t][h] = acorns_at_height(t, h, c)
-        else:
-            continue_at_tree = acorns_at_height(t, h, c) + M[t][h-1]
+    for height in range(1, forest_features[c].h + 1):
+        for tree in range(forest_features[c].t):
+            if height - f > 0:
+                M[tree][height] = max(M[tree][height] + M[tree][height-1], M[tree][height] + M_max[height-f])
+            else:
+                M[tree][height] += M[tree][height-1]
+            M_max[height] = max(M_max[height], M[tree][height])
 
-            other_trees_max = 0
-            for other_tree in range(forest_features[c].t):
-                if other_tree != t and h + f <= forest_features[c].h:
-                    acorn_from_other_tree = M[other_tree][h + f] 
-                    other_trees_max = max(other_trees_max, acorn_from_other_tree + acorns_at_height(t, h, c))
+    max_acorns = max(M_max)
 
-            M[t][h] = max(continue_at_tree, other_trees_max)
+    # print(M)
+    # print(M_max)
 
-    return M[t][forest_features[c].h - 1]
+    return max_acorns
 
 C = int(input())
 
@@ -51,36 +56,17 @@ for _ in range(C):
     t, h, f = map(int, input().split())
     forest_features.append(Forest(t, h, f))
 
-    trees_temp = []
+    trees = []
     # iterate over t trees
     for _ in range(t):
         # #acorns on t-th tree
-        acorns_t_tree = list(map(int, input().split()))[1:]  # Skipping the first value which is the number of acorns
-        trees_temp.append(acorns_t_tree)
-
-    forest.append(trees_temp)
+        acorns = list(map(int, input().split()))[1:]  # Skipping the first value which is the number of acorns
+        trees.append(acorns)
+    
+    forest.append(trees)
 
 zero = int(input())
 
-# # Output forest_features
-# for feature in forest_features:
-#     print(feature.t, feature.h, feature.f)
-
-# # Output forest
-# for trees in forest:
-#     for tree in trees:
-#         print(' '.join(map(str, tree)))
-
 for c in range(C):
-    max_acorns = 0
-    M = [[0] * (forest_features[c].h + 1) for _ in range(forest_features[c].t)]
-
-    for tree in range(forest_features[c].t):
-        max_acorns_temp = acorn_pd(tree, forest_features[c].f, c, M)
-        if max_acorns_temp > max_acorns:
-            max_acorns = max_acorns_temp
-
-    print(M)
-
+    max_acorns = acorn_pd(forest_features[c].f, c)
     print(max_acorns)
-
