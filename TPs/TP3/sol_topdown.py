@@ -30,7 +30,7 @@ def acorn_pd(t, h, f, c, M):
         other_trees_max = 0
         for other_tree in range(forest_features[c].t):
             if other_tree != t:
-                # Move to other tree, decrease height by 2
+                # Move to other tree, decrease height by f
                 acorn_from_other_tree = acorn_pd(other_tree, h + f, f, c, M)
                 other_trees_max = max(other_trees_max, acorn_from_other_tree + acorns_at_height(t, h, c))
         M[t][h] = max(continue_at_tree, other_trees_max)
