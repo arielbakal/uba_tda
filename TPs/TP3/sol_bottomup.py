@@ -21,22 +21,6 @@ def acorns_at_height(t, h, c):
             acorns += 1
     return acorns
 
-# def acorn_pd(t, h, f, c, M):
-#     if h > forest_features[c].h: # base case (got to the top)
-#         return 0
-
-#     if M[t][h] == -1:
-#         continue_at_tree = acorns_at_height(t, h, c) + acorn_pd(t, h + 1, f, c, M)
-#         other_trees_max = 0
-#         for other_tree in range(forest_features[c].t):
-#             if other_tree != t:
-#                 # Move to other tree, decrease height by 2
-#                 acorn_from_other_tree = acorn_pd(other_tree, h + f, f, c, M)
-#                 other_trees_max = max(other_trees_max, acorn_from_other_tree + acorns_at_height(t, h, c))
-#         M[t][h] = max(continue_at_tree, other_trees_max)
-#     return M[t][h]
-
-
 def acorn_pd(t, f, c, M):
 
     # Iterate bottom-up
