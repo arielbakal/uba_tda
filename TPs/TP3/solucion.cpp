@@ -1,68 +1,76 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-// NOTES
-// i'll probably need to save in each tree<acorn> vector the amount of acorns at first position, 
-// to know how many iteration i've to do, also to get O(1) accesing that var
+// NOTES: 
+// SOLVES CORRECTLY INDIVIDUAL PROBLEMS
+// problem at handling all vectors in each subset iteration
 
 struct Forest {
     int t, h, f;
 };
 
-int acorns_at_height(int t, int h, int c);
-
 vector<Forest> forest_features; // contains (t, h, f) for each forest
 vector<vector<vector<int>>> forest; // contains acorns heights for each tree for each forest (forest<tree<acorn>>)
 
-int acorns_at_height(int t, int h, int c) {
+int acorn_pd(int c) {
+    int t = forest_features[c].t;
+    int h = forest_features[c].h;
+    int f = forest_features[c].f;
 
-    vector<int> acorns_at_tree = forest[c][t];
+    vector<vector<int>> M(t, vector<int>(h + 1));
 
-    int acorns = 0;
+    vector<int> M_max(h + 1);
 
-    for (int acorn : acorns_at_tree) {
-        if (acorn == h) {
-            acorns += 1;
+    for (int tree = 0; tree < t; tree++) {
+        for (int acorn_height : forest[c][tree]) {
+            M[tree][acorn_height] += 1;
         }
     }
 
-    return acorns;
-
-};
-
-int acorn_pd(int t, int h, int f, int c, vector<vector<int>>& M) {
-
-    if (h > forest_features[c].h) { // base case (got to the top)
-        return 0;
-    }
-
-    if (M[t][h] == -1) {
-
-        int continue_at_tree = acorns_at_height(t, h, c) + acorn_pd(t, h+1, f, c, M);
-
-        int other_trees_max = 0;
-        for (int other_tree = 0; other_tree < forest_features[c].t; other_tree++) {
-            if (other_tree != t) {
-                // Move to other tree, decrease height by 2
-                int acorn_from_other_tree = acorns_at_height(other_tree, h, c) + acorn_pd(other_tree, h+f, f, c, M);
-                other_trees_max = max(other_trees_max, acorn_from_other_tree);
+    // Iterate bottom-up
+    for (int height = 1; height <= h; height++) {
+        for (int tree = 0; tree < t; tree++) {
+            if (height - f > 0) { // Verify if I can fly to other tree
+                int continue_at_tree = M[tree][height] + M[tree][height - 1];
+                int fly_other_tree = M[tree][height] + M_max[height - f];
+                M[tree][height] = max(continue_at_tree, fly_other_tree);
+            } else { // else, continue
+                M[tree][height] += M[tree][height - 1];
             }
+            
+            // update max acorns at height
+            M_max[height] = max(M_max[height], M[tree][height]);
         }
+    }
 
-        M[t][h] = max(continue_at_tree, other_trees_max);
+    int max_acorns = *max_element(M_max.begin(), M_max.end());
 
-    } 
+    // cout << "Memo Matrix M:" << endl;
+    // for (int i = 0; i < t; ++i) {
+    //     for (int j = 0; j <= h; ++j) {
+    //         cout << M[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
 
-    return M[t][h];
-};
+    // // Print max at height list M_max
+    // cout << "Max at Height List M_max:" << endl;
+    // for (int i = 0; i <= h; ++i) {
+    //     cout << M_max[i] << " ";
+    // }
+    // cout << endl;
+
+    return max_acorns;
+}
 
 int main() {
     int C;
     cin >> C;
 
     // iterate over datasets (forests)
-    for (int i=0; i<C; i++) {
+    for (int i = 0; i < C; i++) {
 
         // first line: t, h, f
         int t, h, f;
@@ -70,29 +78,32 @@ int main() {
 
         forest_features.push_back({t, h, f});
 
-        vector<vector<int>> trees_temp(t); 
+        vector<vector<int>> trees_temp(t); // Resize to hold 't' empty vectors
+
+        // Clear the vector to avoid retaining values from previous dataset
+        trees_temp.clear();
 
         // iterate over t trees
-        for (int j=0; j<t; j++) {
+        for (int j = 0; j < t; j++) {
 
-            // #accorns on t-th tree
+            // #acorns on j-th tree
             int a;
             cin >> a;
 
-            vector<int> acorns_t_tree(a);
+            // Resize the vector to hold 'a' elements
+            trees_temp.push_back(vector<int>(a));
 
             // iterate over a acorns
-            for (int k=0; k<a; k++) {
-                cin >> acorns_t_tree[k];
+            for (int k = 0; k < a; k++) {
+                cin >> trees_temp[j][k];
             }
-
-            trees_temp.push_back(acorns_t_tree);
         }
 
         forest.push_back(trees_temp);
 
         int zero; cin >> zero;
     }
+
 
     // // Output forest_features
     // for (const auto& feature : forest_features) {
@@ -109,15 +120,12 @@ int main() {
     //     }
     // }
 
-    // for (int c=0; c<C; c++) {
+    for (int c=0; c<C; c++) {
 
-    //     vector<vector<int>> M(forest_features[c].t + 1, vector<int>(forest_features[c].h + 1, -1));
+        int max_acorns = acorn_pd(c);
 
-    //     int max_acorns_tree1 = acorn_pd(1, 1, forest_features[c].f, c, M);
-
-    //     cout << max_acorns_tree1 << endl;
-
-    // }
+        cout << max_acorns << endl;
+    }
 
     return 0;
 }
