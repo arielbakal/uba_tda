@@ -1,13 +1,9 @@
-# NOTES
-# maybe i need to consider odd lengths strings
-
-
 # import time
 
 # start_time = time.time()
 
-string_a = [x for x in input()]
-string_b = [x for x in input()]
+string_a = input()
+string_b = input()
 
 def are_equivalent(string_a, string_b):
 
@@ -27,11 +23,14 @@ def are_equivalent(string_a, string_b):
         return string_a == string_b
     
     if len_a % 2 == 0:  # If even length
-        string_a_1 = string_a[:len_a // 2]
-        string_a_2 = string_a[len_a // 2:]
 
-        string_b_1 = string_b[:len_b // 2]
-        string_b_2 = string_b[len_b // 2:]
+        mid = len_a // 2
+
+        string_a_1 = string_a[:mid]
+        string_a_2 = string_a[mid:]
+
+        string_b_1 = string_b[:mid]
+        string_b_2 = string_b[mid:]
 
         first_case = are_equivalent(string_a_1, string_b_1) and are_equivalent(string_a_2, string_b_2)
         if first_case:
