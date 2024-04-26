@@ -27,13 +27,22 @@ bool are_equivalent(const string& string_a, const string& string_b) {
         string string_b_1 = string_b.substr(0, mid);
         string string_b_2 = string_b.substr(mid);
 
-        bool first_case = are_equivalent(string_a_1, string_b_1) && are_equivalent(string_a_2, string_b_2);
-        if (first_case)
-            return true;
-        else {
-            bool second_case = are_equivalent(string_a_1, string_b_2) && are_equivalent(string_a_2, string_b_1);
-            return second_case;
+        bool first_case_1 = are_equivalent(string_a_1, string_b_1);
+        if (first_case_1) {
+            bool first_case_2 = are_equivalent(string_a_2, string_b_2);
+            if (first_case_2) {
+                return true;
+            }
+        } else {
+            bool second_case_1 = are_equivalent(string_a_1, string_b_2);
+            if (second_case_1) {
+                bool second_case_2 = are_equivalent(string_a_2, string_b_1);
+                if (second_case_2) {
+                    return true;
+                }
+            }
         }
+        return false;
     } else { // If odd length
         return false;
     }
