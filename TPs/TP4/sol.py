@@ -19,8 +19,8 @@ def are_equivalent(string_a, string_b):
     if string_a == string_b: # base case (they are equal)
         return True
     
-    if len_a == 1 or len_b == 1: 
-        return string_a == string_b
+    if len_a == 1: 
+        return False
     
     if len_a % 2 == 0:  # If even length
 
