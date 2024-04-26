@@ -1,5 +1,7 @@
 # NOTES
-# do a var for saving lens
+# maybe i need to consider odd lengths strings
+
+
 # import time
 
 # start_time = time.time()
@@ -13,6 +15,9 @@ def are_equivalent(string_a, string_b):
     len_b = len(string_b)
 
     if len_a != len_b: # error handling
+        return False
+    
+    if len_a == 0:
         return False
 
     if string_a == string_b: # base case (they are equal)
