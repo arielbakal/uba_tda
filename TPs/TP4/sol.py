@@ -26,25 +26,28 @@ def are_equivalent(string_a, string_b):
     if len_a == 1 or len_b == 1: 
         return string_a == string_b
     
-    string_a_1 = string_a[:len_a // 2]
-    string_a_2 = string_a[len_a // 2:]
+    if len_a % 2 == 0:  # If even length
+        string_a_1 = string_a[:len_a // 2]
+        string_a_2 = string_a[len_a // 2:]
 
-    string_b_1 = string_b[:len_b // 2]
-    string_b_2 = string_b[len_b // 2:]
+        string_b_1 = string_b[:len_b // 2]
+        string_b_2 = string_b[len_b // 2:]
 
-    first_case = are_equivalent(string_a_1, string_b_1) and are_equivalent(string_a_2, string_b_2)
+        first_case = are_equivalent(string_a_1, string_b_1) and are_equivalent(string_a_2, string_b_2)
+        if first_case:
+            return True
+        else:
+            second_case = are_equivalent(string_a_1, string_b_2) and are_equivalent(string_a_2, string_b_1)
+            return second_case
 
-    if first_case:
-        return first_case
-    
-    else:
-        second_case = are_equivalent(string_a_1, string_b_2) and are_equivalent(string_a_2, string_b_1)
-        return second_case
+    else:  # If odd length
+        return False
     
 if are_equivalent(string_a, string_b):
     print("YES")
 else:
     print("NO")
+
 
 # end_time = time.time()
 
