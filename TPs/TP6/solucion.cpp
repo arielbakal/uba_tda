@@ -45,7 +45,7 @@ int main() {
 
                         found_equal_pair = true;
                         j = n; // end loop
-                        i = 0; // restart primary loop
+                        // i = 0; // restart primary loop
                     } 
                 }
                 
@@ -65,7 +65,7 @@ int main() {
                         ops_sum++;
 
                         k = n; // end loop
-                        i = 0; // restart primary loop
+                        // i = 0; // restart primary loop
                     }
                     if (k == n-1) { //if didnt found second diff pair, then there is no solution
                         ops_sum = -1;
