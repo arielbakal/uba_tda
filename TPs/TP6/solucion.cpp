@@ -29,7 +29,7 @@ int main() {
                         // swap s[i] with t[j]
                         char temp_s_i = s[i]; 
                         s[i] = t[j];
-                        t[i] = temp_s_i;
+                        t[j] = temp_s_i;
                         ops_sum++;
                     } else { // got inverted pairs
                         // swap s[j] with t[j]
@@ -52,6 +52,6 @@ int main() {
         }
     }
 
-    cout << ops_sum << s << t << endl;
+    cout << ops_sum << " " << s << " " << t << endl;
 
 }
