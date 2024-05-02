@@ -31,6 +31,8 @@ int main() {
                 ops_sum = -1;
             }
 
+            bool found_equal_pair = false;
+
             for (int j=i+1; j<n; j++) { // iterate over {i...n} and search for second diff pair
 
                 if (s[j] != t[j]) { // got second diff pair
@@ -40,22 +42,35 @@ int main() {
                         swap(i, j);
                         swaps_memo.push_back(make_tuple(i, j));
                         ops_sum++;
-                    } else { // got inverted pairs
-                        // swap s[j] with t[j]
-                        swap(j, j);
-                        swaps_memo.push_back(make_tuple(j, j));
-                        ops_sum++;
-                        // then swap s[j] with t[i] 
-                        swap(j, i);
-                        swaps_memo.push_back(make_tuple(j, i));
-                        ops_sum++;
-                    }
-                    j=n;
+
+                        found_equal_pair = true;
+                        j = n; // end loop
+                    } 
                 }
-                if (j == n-1) { //if didnt found second diff pair, then there is no solution
-                    ops_sum = -1;
+                
+            }
+
+            if (found_equal_pair == false) { // find second diff pair, not equal
+                for (int k=i+1; k<n; k++) {
+
+                    if (s[i] != t[k]) { // got second diff pair (here only handles not equal diff pairs)
+                        // swap s[k] with t[k]
+                        swap(k, k);
+                        swaps_memo.push_back(make_tuple(k, k));
+                        ops_sum++;
+                        // then swap s[k] with t[i] 
+                        swap(k, i);
+                        swaps_memo.push_back(make_tuple(k, i));
+                        ops_sum++;
+
+                        k = n; // end loop
+                    }
+                    if (k == n-1) { //if didnt found second diff pair, then there is no solution
+                        ops_sum = -1;
+                    }
                 }
             }
+            found_equal_pair = false; // restart var for next pairs
         }
     }
 
