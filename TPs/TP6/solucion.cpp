@@ -45,6 +45,7 @@ int main() {
 
                         found_equal_pair = true;
                         j = n; // end loop
+                        i = 0; // restart primary loop
                     } 
                 }
                 
@@ -64,6 +65,7 @@ int main() {
                         ops_sum++;
 
                         k = n; // end loop
+                        i = 0; // restart primary loop
                     }
                     if (k == n-1) { //if didnt found second diff pair, then there is no solution
                         ops_sum = -1;
@@ -76,7 +78,7 @@ int main() {
 
     cout << ops_sum << endl;
     for (const auto& pair : swaps_memo) {
-        cout << get<0>(pair) << " " << get<1>(pair) << endl;
+        cout << get<0>(pair) + 1 << " " << get<1>(pair) + 1 << endl;
     }
 
 }
