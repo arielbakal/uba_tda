@@ -30,12 +30,17 @@ int main() {
     int ops_sum = 0;
 
     auto swap = [&](int s_index, int t_index) {
-        // swap chars, maintaining index
-        tuple<char, int> new_s = make_tuple(get<0>(t[t_index]), get<1>(s[s_index]));
-        tuple<char, int> new_t = make_tuple(get<0>(s[s_index]), get<1>(t[t_index]));
-        s[s_index] = new_s;
-        t[t_index] = new_t;
 
+        if (get<0>(s[s_index]) == get<0>(t[t_index])) {
+            s.erase(auto s.begin() + s_index);
+            t.erase(auto t.begin() + t_index);
+        } else {
+            // swap chars, maintaining index
+            tuple<char, int> new_s = make_tuple(get<0>(t[t_index]), get<1>(s[s_index]));
+            tuple<char, int> new_t = make_tuple(get<0>(s[s_index]), get<1>(t[t_index]));
+            s[s_index] = new_s;
+            t[t_index] = new_t;
+        }
         swaps_memo.push_back(make_tuple(get<1>(s[s_index]), get<1>(t[t_index])));
     };
 
@@ -56,6 +61,8 @@ int main() {
                     if (get<0>(s[i]) == get<0>(s[j])) { // got equal pairs
                         // swap s[i] with t[j]
                         swap(i, j);
+                        swaps_memo.push_back(make_tuple(get<1>(s[i]), get<1>(t[j])));
+
                         ops_sum++;
 
                         found_equal_pair = true;
