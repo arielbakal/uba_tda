@@ -4,7 +4,7 @@
 #include <tuple>
 using namespace std;
 
-// NOTES: remove pair before swapping
+// NOTES: redo algorithm or find prunnings, worst case O(n^2)
 
 int main() {
     
