@@ -54,7 +54,7 @@ int main() {
             if (found_equal_pair == false) { // find second diff pair, not equal
                 for (int k=i+1; k<n; k++) {
 
-                    if (s[i] != t[k]) { // got second diff pair (here only handles not equal diff pairs)
+                    if (s[k] != t[k]) { // got second diff pair (here only handles not equal diff pairs)
                         // swap s[k] with t[k]
                         swap(k, k);
                         swaps_memo.push_back(make_tuple(k, k));
