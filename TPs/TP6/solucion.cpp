@@ -30,25 +30,30 @@ int main() {
     int ops_sum = 0;
 
     auto swap = [&](int s_index, int t_index) {
+        
+        tuple<char, int> temp_s = s[s_index];
+        tuple<char, int> temp_t = t[t_index];
+        
+        swaps_memo.push_back(make_tuple(get<1>(temp_s), get<1>(temp_t)));
 
-        if (get<0>(s[s_index]) == get<0>(t[t_index])) {
-            s.erase(auto s.begin() + s_index);
-            t.erase(auto t.begin() + t_index);
+        if (get<0>(temp_s) == get<0>(temp_t)) {
+            s.erase(s.begin() + s_index);
+            t.erase(t.begin() + t_index);
+            string_len--;
         } else {
             // swap chars, maintaining index
-            tuple<char, int> new_s = make_tuple(get<0>(t[t_index]), get<1>(s[s_index]));
-            tuple<char, int> new_t = make_tuple(get<0>(s[s_index]), get<1>(t[t_index]));
+            tuple<char, int> new_s = make_tuple(get<0>(temp_t), get<1>(temp_s));
+            tuple<char, int> new_t = make_tuple(get<0>(temp_s), get<1>(temp_t));
             s[s_index] = new_s;
             t[t_index] = new_t;
         }
-        swaps_memo.push_back(make_tuple(get<1>(s[s_index]), get<1>(t[t_index])));
     };
 
     for (int i=0; i<string_len; i++) { // iterate over s
 
         if (get<0>(s[i]) != get<0>(t[i])) { // if a get diff pair
 
-            if (n == 1) {
+            if (string_len == 1) {
                 ops_sum = -1;
             }
 
@@ -61,8 +66,6 @@ int main() {
                     if (get<0>(s[i]) == get<0>(s[j])) { // got equal pairs
                         // swap s[i] with t[j]
                         swap(i, j);
-                        swaps_memo.push_back(make_tuple(get<1>(s[i]), get<1>(t[j])));
-
                         ops_sum++;
 
                         found_equal_pair = true;
@@ -87,7 +90,7 @@ int main() {
                         k = string_len; // end loop
                         i = 0; // restart primary loop
                     }
-                    if (k == n-1) { //if didnt found second diff pair, then there is no solution
+                    if (k == string_len-1) { //if didnt found second diff pair, then there is no solution
                         ops_sum = -1;
                     }
                 }
