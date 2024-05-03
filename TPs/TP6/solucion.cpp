@@ -1,49 +1,47 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <tuple>
+#include <set>
 using namespace std;
-
-// NOTES: redo algorithm or find prunnings, worst case O(n^2)
 
 int main() {
     
     int n; cin >> n;
     string string_s; cin >> string_s;
     string string_t; cin >> string_t;
-
-    vector<tuple<char, int>> s;
-    vector<tuple<char, int>> t;
+    
+    vector<pair<char, int>> s;
+    vector<pair<char, int>> t;
     int string_len = 0;
-
+    
     // remove all equal pairs (there's no need for swapping)
     for (int i=0; i<n; i++) {
         if (string_s[i] != string_t[i]) {
-            s.push_back(make_tuple(string_s[i],i));
-            t.push_back(make_tuple(string_t[i],i));
+            s.push_back(make_pair(string_s[i],i));
+            t.push_back(make_pair(string_t[i],i));
             string_len++;
         }
     }
 
-    vector<tuple<int, int>> swaps_memo;
+    set<pair<int, int>> swaps_memo;
 
     int ops_sum = 0;
 
     auto swap = [&](int s_index, int t_index) {
         
-        tuple<char, int> temp_s = s[s_index];
-        tuple<char, int> temp_t = t[t_index];
+        pair<char, int> temp_s = s[s_index];
+        pair<char, int> temp_t = t[t_index];
         
-        swaps_memo.push_back(make_tuple(get<1>(temp_s), get<1>(temp_t)));
+        swaps_memo.insert({s_index, t_index});
 
-        if (get<0>(temp_s) == get<0>(temp_t)) {
+        if (temp_s.first == temp_t.first) {
             s.erase(s.begin() + s_index);
             t.erase(t.begin() + t_index);
             string_len--;
         } else {
             // swap chars, maintaining index
-            tuple<char, int> new_s = make_tuple(get<0>(temp_t), get<1>(temp_s));
-            tuple<char, int> new_t = make_tuple(get<0>(temp_s), get<1>(temp_t));
+            pair<char, int> new_s = make_pair(temp_t.first, temp_s.second);
+            pair<char, int> new_t = make_pair(temp_s.first, temp_t.second);
             s[s_index] = new_s;
             t[t_index] = new_t;
         }
@@ -51,7 +49,7 @@ int main() {
 
     for (int i=0; i<string_len; i++) { // iterate over s
 
-        if (get<0>(s[i]) != get<0>(t[i])) { // if a get diff pair
+        if (s[i].first != t[i].first) { // if a get diff pair
 
             if (string_len == 1) {
                 ops_sum = -1;
@@ -61,9 +59,9 @@ int main() {
 
             for (int j=i+1; j<string_len; j++) { // iterate over {i...n} and search for second diff pair
 
-                if (get<0>(s[j]) != get<0>(t[j])) { // got second diff pair
+                if (s[j].first != t[j].first) { // got second diff pair
 
-                    if (get<0>(s[i]) == get<0>(s[j])) { // got equal pairs
+                    if (s[i].first == s[j].first) { // got equal pairs
                         // swap s[i] with t[j]
                         swap(i, j);
                         ops_sum++;
@@ -79,7 +77,7 @@ int main() {
             if (found_equal_pair == false) { // find second diff pair, not equal
                 for (int k=i+1; k<string_len; k++) {
 
-                    if (get<0>(s[k]) != get<0>(t[k])) { // got second diff pair (here only handles not equal diff pairs)
+                    if (s[k].first != t[k].first) { // got second diff pair (here only handles not equal diff pairs)
                         // swap s[k] with t[k]
                         swap(k, k);
                         ops_sum++;
@@ -103,7 +101,7 @@ int main() {
 
     cout << ops_sum << endl;
     for (const auto& pair : swaps_memo) {
-        cout << get<0>(pair) + 1 << " " << get<1>(pair) + 1 << endl;
+        cout << pair.first + 1 << " " << pair.second + 1 << endl;
     }
 
 }
