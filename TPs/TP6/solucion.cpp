@@ -28,7 +28,6 @@ int main() {
         s[s_index] = t[t_index];
         t[t_index] = temp_s;
         swaps_memo.push_back({s_index, t_index});
-        ops_sum++;
     };
     
     bool no_solution = false;
@@ -51,6 +50,7 @@ int main() {
                         if (s[i] == s[j]) { // got equal pairs
                             // swap s[i] with t[j]
                             swap(i, j);
+                            ops_sum++;
     
                             found_equal_pair = true;
                             break;
@@ -65,8 +65,11 @@ int main() {
                         if (s[k] != t[k]) { // got second diff pair (here only handles not equal diff pairs)
                             // swap s[k] with t[k]
                             swap(k, k);
+                            ops_sum++;
                             // then swap s[k] with t[i] 
                             swap(k, i);
+                            ops_sum++;
+    
                             break;
                         }
                         if (k == n-1) { //if didnt found second diff pair, then there is no solution
