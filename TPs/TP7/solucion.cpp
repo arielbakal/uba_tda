@@ -8,7 +8,7 @@ using namespace std;
 vector<int> find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& doors, vector<vector<int>>& switches, vector<int>& lights_on) {
 
     if (current_room == r-1) { // Case base: got to the room
-        return steps;
+        return lights_on;
     };
 
     for (int current_room_neighbor : doors[current_room]) { // iterate over neighbor rooms
@@ -41,6 +41,8 @@ vector<int> find_shortest_path(int r, int current_room, int steps, vector<vector
 
         // with this i can explore all combination of which lights i switch on in my switches_neighbor
     }
+
+    return lights_on;
 }
 
 int main() {
@@ -75,20 +77,26 @@ int main() {
             switches_graph[k-1].push_back(l-1); 
         }
 
-        for (int t=0; t<r: t++) {
-            if (t=0) lights_on.push_back(1)
-            else lights_on.push_back(0)
+        for (int t=0; t<r; t++) {
+            if (t=0) lights_on.push_back(1);
+            else lights_on.push_back(0);
         }
 
         // building door_graph is O(r+d) and lights_graph is O(r+s)
         
-        vector<int> shortest_path = find_shortest_path(r, 0, 0, doors_graph, switches_graph, lights_on);
+        // vector<int> shortest_path = find_shortest_path(r, 0, 0, doors_graph, switches_graph, lights_on);
 
-        if (shortest_path.empty()) {
-            cout << "The problem cannot be solved." << endl;
-        } else {
-            // implement
+        vector<int> lights = find_shortest_path(r, 0, 0, doors_graph, switches_graph, lights_on);
+
+        for (int l : lights) {
+            cout << l;
         }
+
+        // if (shortest_path.empty()) {
+        //     cout << "The problem cannot be solved." << endl;
+        // } else {
+        //     // implement
+        // }
     }
 
     return 0;
