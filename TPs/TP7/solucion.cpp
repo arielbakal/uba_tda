@@ -11,52 +11,28 @@ vector<int> find_shortest_path(int r, int room, int steps, vector<vector<int>>& 
         return steps;
     };
 
-    // visit neighbors
-    for (int neighbor : doors[room]) { // iterate over neighbors rooms
+    for (int neighbor : doors[room]) { // iterate over neighbor rooms
 
         if (lights_on[neighbor] == 1) { // if lights are on in neighbor room then,
 
             // explore neighbor room
             find_shortest_path(r, neighbor, steps + 1, doors, switches, lights_on);  
-
-        } else { // check if i can switch neighbor room lights
-
-            for (int switches_neighbor : switches[room]) { // iterate over rooms i can switch on
-                if (neighbor == switches_neighbor) { // if i can switch on a neighbor room then,
-
-                    // switch light and explore
-                    vector<int> temp_lights_on = lights_on;
-                    temp_lights_on[switches_neighbor] = 1; // switch lights on 
-                    find_shortest_path(r, room, steps + 1, doors, switches, temp_lights_on); // only switches room
-
-                    // dont switch light and explore
-                    find_shortest_path(r, room, steps, doors, switches, lights_on);
-
-                    // with this i can explore all combination of which lights i switch on in my switches_neighbor
-                } 
-            }
-
-            for (int switches_neighbor : switches_neighbors) {
-
-
-            }
-
-
-
-            for (int room_switched : switches[room]) { // get rooms i can switch its lights
-
-                if (neighbor == room_switched) { // if i can switch on a neighbor room then,
-
-                    vector<int> temp_lights_on = lights_on;
-                    
-                    // explore different room
-                    find_shortest_path(r, neighbor, steps + 2, doors, switches);  
-                }
-            }
         }
-        
     }
 
+    // if i didnt move rooms, then maybe is time for switching on some lights
+    for (int switches_neighbor : switches[room]) { // iterate over rooms i can switch on
+
+        // switch light and explore
+        vector<int> temp_lights_on = lights_on;
+        temp_lights_on[switches_neighbor] = 1; // switch lights on 
+        find_shortest_path(r, room, steps + 1, doors, switches, temp_lights_on); // only switches room on
+
+        // dont switch light and explore
+        find_shortest_path(r, room, steps, doors, switches, lights_on);
+
+        // with this i can explore all combination of which lights i switch on in my switches_neighbor
+    }
 }
 
 int main() {
