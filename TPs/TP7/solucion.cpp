@@ -1,32 +1,35 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 // NOTES: 
-// since i need to get neighbors constatly, i opt for representing graph as an adjacency list
-// 2nd graph is crearly a digraph. Again, i need to get neighbors constantly -> adjacency list
-
 // there is no graph as tree, cant use DFS or BFS. Look for Djikstra or A*
 
 int main() {
-
     int r, d, s;
-    int blanck;
 
-    while (r != 0 && d != r, && s != r) {
-
+    while (true) {
         cin >> r >> d >> s;
 
-        for (int i=0; i<d; i++) {
+        if (r == 0 && d == 0 && s == 0) break;
 
+        // represent graphs as adjacents lists
+        vector<vector<int>> door_graph(r); // O(r) allocate r cells in memo
+        vector<vector<int>> switches_graph(r); // O(r) 
+
+        for (int t=0; t<d; t++) { // builds door_graph. Iterating over all edges O(d) 
+            int i, j; cin >> i >> j;
+            // door connects both i, j rooms
+            door_graph[i-1].push_back(j-1); // O(1) since i already allocated memory
+            door_graph[j-1].push_back(i-1); // O(1)
+        } 
+
+        for (int t=0; t<s; t++) { // builds lights_graph. Iterating over all switches O(s)
+            int k, l; cin >> k >> l;
+            // room k switches room l
+            switches_graph[k-1].push_back(l-1); 
         }
-
-        for (int j=0; j<s; j++) {
-
-        }
-
-        cin >> blanck;
     }
-
 
     return 0;
 }
