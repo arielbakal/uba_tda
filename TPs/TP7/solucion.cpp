@@ -37,6 +37,8 @@ int main() {
             // room k switches room l
             switches_graph[k-1].push_back(l-1); 
         }
+
+        // building door_graph is O(r+d) and lights_graph is O(r+s)
         
         vector<int> shortest_path = find_shortest_path(r, doors_graph, switches_graph);
 
