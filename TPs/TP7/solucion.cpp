@@ -4,7 +4,7 @@
 using namespace std;
 
 // NOTES: 
-// TODO: look for infinite loops. If i dont track visisted nodes, it will never end
+// TODO: BT bad handled. I track visited but still never ending
 // Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
 
 vector<int> find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& doors, vector<int> visited, vector<vector<int>>& switches, vector<int> lights_on) {
