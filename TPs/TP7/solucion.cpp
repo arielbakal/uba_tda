@@ -3,6 +3,8 @@
 #include <vector>
 using namespace std;
 
+// STATUS: BT ends, but dont solve
+
 // NOTES: 
 // Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
 
