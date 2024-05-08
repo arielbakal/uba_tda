@@ -8,9 +8,9 @@ using namespace std;
 // NOTES: 
 // Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
 
-vector<int> find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on) {
+int find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on) {
     if (current_room == r - 1) {
-        return lights_on;
+        return steps;
     }
 
     visited[current_room] = true;
@@ -23,15 +23,15 @@ vector<int> find_shortest_path(int r, int current_room, int steps, vector<vector
                         // switch off light, move and explore 
                         vector<int> temp_lights_on = lights_on;
                         temp_lights_on[current_room] = 0;
-                        vector<int> path = find_shortest_path(r, current_room_neighbor, steps + 2, doors, visited, switches, temp_lights_on);
-                        if (!path.empty()) return path;
+                        int solution = find_shortest_path(r, current_room_neighbor, steps + 2, doors, visited, switches, temp_lights_on);
+                        if (solution != -1) return solution;
                     }
                 }
                 // dont switch off light, move and explore
                 vector<int> temp_lights_on = lights_on;
                 temp_lights_on[current_room] = 1;
-                vector<int> path = find_shortest_path(r, current_room_neighbor, steps + 1, doors, visited, switches, temp_lights_on);
-                if (!path.empty()) return path;
+                int solution = find_shortest_path(r, current_room_neighbor, steps + 1, doors, visited, switches, temp_lights_on);
+                if (solution != -1) return solution;
             } else {
                 // if i didnt move rooms, then maybe is time for switching on some lights
                 for (int switches_neighbor : switches[current_room]) { // iterate over rooms i can switch on
@@ -39,19 +39,19 @@ vector<int> find_shortest_path(int r, int current_room, int steps, vector<vector
                         // switch light and explore
                         vector<int> temp_lights_on = lights_on;
                         temp_lights_on[switches_neighbor] = 1; // switch lights on 
-                        vector<int> path = find_shortest_path(r, current_room, steps + 1, doors, visited, switches, temp_lights_on); // only switches room on
-                        if (!path.empty()) return path;
+                        int path = find_shortest_path(r, current_room, steps + 1, doors, visited, switches, temp_lights_on); // only switches room on
+                        if (solution != -1) return solution;
                     }
                 }
                 // dont switch light and explore
-                vector<int> path = find_shortest_path(r, current_room_neighbor, steps, doors, visited, switches, lights_on);
-                if (!path.empty()) return path;
+                int path = find_shortest_path(r, current_room_neighbor, steps, doors, visited, switches, lights_on);
+                if (solution != -1) return solution;
                 // with this i can explore all combination of which lights i switch on in my switches_neighbor
             }
         }
     }
 
-    return {}; // Empty vector indicates failure to find a solution
+    return -1; // -1 indicates there's no solution
 }
 
 int main() {
@@ -88,14 +88,12 @@ int main() {
             switches_graph[k - 1].push_back(l - 1);
         }
 
-        vector<int> lights = find_shortest_path(r, 0, 0, doors_graph, visited, switches_graph, lights_on);
+        int steps = find_shortest_path(r, 0, 0, doors_graph, visited, switches_graph, lights_on);
 
-        if (lights.empty()) {
+        if (steps == -1) {
             cout << "The problem cannot be solved." << endl;
         } else {
-            for (int l : lights) {
-                cout << l;
-            }
+            cout << steps;
         }
     }
 
