@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
 using namespace std;
 
 // STATUS: BT ends, but dont solve
@@ -8,9 +9,13 @@ using namespace std;
 // NOTES: 
 // Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
 
-int find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on) {
+pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps, 
+                       vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on, vector<string>& track) {
     if (current_room == r - 1) {
-        return steps;
+        pair<int, vector<string>> solution;
+        solution.first = steps;
+        solution.second = track;
+        return solution;
     }
 
     visited[current_room] = true;
@@ -23,15 +28,17 @@ int find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& 
                         // switch off light, move and explore 
                         vector<int> temp_lights_on = lights_on;
                         temp_lights_on[current_room] = 0;
-                        int solution = find_shortest_path(r, current_room_neighbor, steps + 2, doors, visited, switches, temp_lights_on);
-                        if (solution != -1) return solution;
+                        vector<string> temp_track = track;
+                        temp_track.push_back("Switch off light in room " + to_string(current_room_neighbor + 1));
+                        pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps + 2, doors, visited, switches, temp_lights_on, temp_track);
+                        if (solution.first != -1) return solution;
                     }
                 }
                 // dont switch off light, move and explore
-                vector<int> temp_lights_on = lights_on;
-                temp_lights_on[current_room] = 1;
-                int solution = find_shortest_path(r, current_room_neighbor, steps + 1, doors, visited, switches, temp_lights_on);
-                if (solution != -1) return solution;
+                vector<string> temp_track = track;
+                temp_track.push_back("Move to room " + to_string(current_room_neighbor + 1));
+                pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps + 1, doors, visited, switches, lights_on, temp_track);
+                if (solution.first != -1) return solution;
             } else {
                 // if i didnt move rooms, then maybe is time for switching on some lights
                 for (int switches_neighbor : switches[current_room]) { // iterate over rooms i can switch on
@@ -39,19 +46,26 @@ int find_shortest_path(int r, int current_room, int steps, vector<vector<int>>& 
                         // switch light and explore
                         vector<int> temp_lights_on = lights_on;
                         temp_lights_on[switches_neighbor] = 1; // switch lights on 
-                        int path = find_shortest_path(r, current_room, steps + 1, doors, visited, switches, temp_lights_on); // only switches room on
-                        if (solution != -1) return solution;
+                        vector<string> temp_track = track;
+                        temp_track.push_back("Switch on light in room " + to_string(current_room + 1));
+                        pair<int, vector<string>> solution = find_shortest_path(r, current_room, steps + 1, doors, visited, switches, temp_lights_on, temp_track); // only switches room on
+                        if (solution.first != -1) return solution;
                     }
                 }
                 // dont switch light and explore
-                int path = find_shortest_path(r, current_room_neighbor, steps, doors, visited, switches, lights_on);
-                if (solution != -1) return solution;
+                vector<string> temp_track = track;
+                temp_track.push_back("Move to room " + to_string(current_room_neighbor + 1));
+                pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps, doors, visited, switches, lights_on, temp_track);
+                if (solution.first != -1) return solution;
                 // with this i can explore all combination of which lights i switch on in my switches_neighbor
             }
         }
     }
-
-    return -1; // -1 indicates there's no solution
+    
+    pair<int, vector<string>> no_solution;
+    no_solution.first = -1;
+    no_solution.second = track;
+    return no_solution; // -1 indicates there's no solution
 }
 
 int main() {
@@ -72,6 +86,7 @@ int main() {
         vector<int> lights_on(r, 0); // tracking rooms' lights 
         vector<bool> visited(r, false); // tracking visited rooms
         visited[0] = true;
+        vector<string> track;
 
         for (int t = 0; t < d; t++) { // builds door_graph. Iterating over all edges O(d) 
             int i, j;
@@ -88,12 +103,14 @@ int main() {
             switches_graph[k - 1].push_back(l - 1);
         }
 
-        int steps = find_shortest_path(r, 0, 0, doors_graph, visited, switches_graph, lights_on);
+        pair<int, vector<string>> sol = find_shortest_path(r, 0, 0, doors_graph, visited, switches_graph, lights_on, track);
 
-        if (steps == -1) {
+        if (sol.first == -1) {
             cout << "The problem cannot be solved." << endl;
         } else {
-            cout << steps;
+            for (string move: sol.second) {
+                cout << move << endl;
+            }
         }
     }
 
