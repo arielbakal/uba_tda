@@ -7,6 +7,7 @@ using namespace std;
 // STATUS: BT ends, but dont solve
 
 // NOTES: 
+// One person did it with BFS, maybe is time to study more theory
 // Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
 
 pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps, 
