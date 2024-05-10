@@ -7,7 +7,6 @@ using namespace std;
 // STATUS: BT ends, but dont solve
 
 // NOTES: 
-// One person did it with BFS, maybe is time to study more theory
 // Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
 
 pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps, 
@@ -30,7 +29,8 @@ pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps,
                         vector<int> temp_lights_on = lights_on;
                         temp_lights_on[current_room] = 0;
                         vector<string> temp_track = track;
-                        temp_track.push_back("Switch off light in room " + to_string(current_room_neighbor + 1));
+                        temp_track.push_back("Move to room " + to_string(current_room_neighbor + 1));
+                        temp_track.push_back("Switch off light in room " + to_string(current_room + 1));
                         pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps + 2, doors, visited, switches, temp_lights_on, temp_track);
                         if (solution.first != -1) return solution;
                     }
@@ -48,7 +48,7 @@ pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps,
                         vector<int> temp_lights_on = lights_on;
                         temp_lights_on[switches_neighbor] = 1; // switch lights on 
                         vector<string> temp_track = track;
-                        temp_track.push_back("Switch on light in room " + to_string(current_room + 1));
+                        temp_track.push_back("Switch on light in room " + to_string(switches_neighbor + 1));
                         pair<int, vector<string>> solution = find_shortest_path(r, current_room, steps + 1, doors, visited, switches, temp_lights_on, temp_track); // only switches room on
                         if (solution.first != -1) return solution;
                     }
@@ -85,6 +85,7 @@ int main() {
         vector<vector<int>> doors_graph(r); // O(r) allocate r cells in memo
         vector<vector<int>> switches_graph(r); // O(r)
         vector<int> lights_on(r, 0); // tracking rooms' lights 
+        lights_on[0] = 1;
         vector<bool> visited(r, false); // tracking visited rooms
         visited[0] = true;
         vector<string> track;
