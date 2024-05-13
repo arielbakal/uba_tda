@@ -4,10 +4,10 @@
 #include <string>
 using namespace std;
 
-// STATUS: BT ends, but dont solve
+// STATUS: BT ends, but dont solve.
 
 // NOTES: 
-// Currently doing backtracking with graphs (?), but looks good. If not, implement Dijkstra then A*. 
+// Currently doing backtracking, but i should try BFS
 
 pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps, 
                        vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on, vector<string>& track) {
