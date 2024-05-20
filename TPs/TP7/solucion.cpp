@@ -4,10 +4,8 @@
 #include <string>
 using namespace std;
 
-// STATUS: BT ends, but dont solve.
-
 // NOTES: 
-// Currently doing backtracking, but i should try BFS
+// Solve with BFS
 
 pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps, 
                        vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on, vector<string>& track) {
