@@ -1,4 +1,8 @@
-# Notes: impl graph and priorityqueue  
+# Notes: 
+# 1. Armo un grafo con las keys como nodos incluyendo 0000
+# 2. Calculo todos los pesos (distancias entre keys)
+# 3. Armo un AGM enraizado en 0000
+# 4. El resultado es la suma de las aristas del AGM
 
 T = int(input()) # test cases
 keys_global = []
