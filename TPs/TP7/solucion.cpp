@@ -5,7 +5,8 @@
 using namespace std;
 
 // NOTES: 
-// Solve with BFS. Remove unnecesary includes
+// I need to implement two graphs (doors, switches) and represent nodes as states (room, light on or off).
+// For each step in bfs we extarct a state from queue and for expansion we need to consider 1. moving to that room (if lighted) 2. switch any light of neighbor rooms
 
 vector<int> bfs(const vector<vector<int>>& grafo, int nodo_inicial, int nodo_final) {
     vector<bool> visitados(grafo.size(), false);
