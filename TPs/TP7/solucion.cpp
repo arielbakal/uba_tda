@@ -1,72 +1,57 @@
 #include <iostream>
 #include <algorithm>
+#include <queue>
 #include <vector>
-#include <string>
+#include <unordered_map>
 using namespace std;
 
 // NOTES: 
-// Solve with BFS
+// Solve with BFS. Remove unnecesary includes
 
-pair<int, vector<string>> find_shortest_path(int r, int current_room, int steps, 
-                       vector<vector<int>>& doors, vector<bool>& visited, vector<vector<int>>& switches, vector<int>& lights_on, vector<string>& track) {
-    if (current_room == r - 1) {
-        pair<int, vector<string>> solution;
-        solution.first = steps;
-        solution.second = track;
-        return solution;
-    }
+unordered_map<int, int> bfs(const vector<vector<int>>& grafo, int nodo_inicial) {
 
-    visited[current_room] = true;
+    vector<bool> visitados(grafo.size(), false);
+    queue<int> cola;
+    unordered_map<int, int> padres;
 
-    for (int current_room_neighbor : doors[current_room]) { // iterate over neighbor rooms
-        if (!visited[current_room_neighbor]) { // avoid visiting rooms i've already visited
-            if (lights_on[current_room_neighbor] == 1) { // check if lights are on in neighbor room then,
-                for (int switches_other_neighbor : switches[current_room_neighbor]) { // iterate over other neighbor rooms the room's neighbor can switch (messy)
-                    if (current_room == switches_other_neighbor) { 
-                        // switch off light, move and explore 
-                        vector<int> temp_lights_on = lights_on;
-                        temp_lights_on[current_room] = 0;
-                        vector<string> temp_track = track;
-                        temp_track.push_back("Move to room " + to_string(current_room_neighbor + 1));
-                        temp_track.push_back("Switch off light in room " + to_string(current_room + 1));
-                        pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps + 2, doors, visited, switches, temp_lights_on, temp_track);
-                        if (solution.first != -1) return solution;
-                    }
-                }
-                // dont switch off light, move and explore
-                vector<string> temp_track = track;
-                temp_track.push_back("Move to room " + to_string(current_room_neighbor + 1));
-                pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps + 1, doors, visited, switches, lights_on, temp_track);
-                if (solution.first != -1) return solution;
-            } else {
-                // if i didnt move rooms, then maybe is time for switching on some lights
-                for (int switches_neighbor : switches[current_room]) { // iterate over rooms i can switch on
-                    if (lights_on[switches_neighbor] == 0) {
-                        // switch light and explore
-                        vector<int> temp_lights_on = lights_on;
-                        temp_lights_on[switches_neighbor] = 1; // switch lights on 
-                        vector<string> temp_track = track;
-                        temp_track.push_back("Switch on light in room " + to_string(switches_neighbor + 1));
-                        pair<int, vector<string>> solution = find_shortest_path(r, current_room, steps + 1, doors, visited, switches, temp_lights_on, temp_track); // only switches room on
-                        if (solution.first != -1) return solution;
-                    }
-                }
-                // dont switch light and explore
-                vector<string> temp_track = track;
-                temp_track.push_back("Move to room " + to_string(current_room_neighbor + 1));
-                pair<int, vector<string>> solution = find_shortest_path(r, current_room_neighbor, steps, doors, visited, switches, lights_on, temp_track);
-                if (solution.first != -1) return solution;
-                // with this i can explore all combination of which lights i switch on in my switches_neighbor
+    cola.push(nodo_inicial);
+    visitados[nodo_inicial] = true;
+
+    while (!cola.empty()) {
+        int nodo_actual = cola.front();
+        cola.pop();
+
+        for (int vecino : grafo[nodo_actual]) {
+            if (!visitados[vecino]) {
+                cola.push(vecino);
+                padres[vecino] = nodo_actual;
+                visitados[vecino] = true;
             }
         }
     }
-    
-    pair<int, vector<string>> no_solution;
-    no_solution.first = -1;
-    no_solution.second = track;
-    return no_solution; // -1 indicates there's no solution
+
+    return padres;
 }
 
+vector<int> encontrar_camino(const unordered_map<int, int>& padres, int inicio, int fin) {
+    vector<int> camino;
+    int nodo_actual = fin;
+
+    while (nodo_actual != inicio) {
+        // Usamos at() en lugar de [] para acceder a elementos en un unordered_map const
+        auto it = padres.find(nodo_actual);
+        if (it != padres.end()) {  // Verificar si el nodo tiene un padre
+            camino.push_back(nodo_actual);
+            nodo_actual = it->second;  // Obtener el valor (padre) del iterador
+        } else {
+            return {}; // No se encontró un camino
+        }
+    }
+
+    camino.push_back(inicio); // Agregar el nodo inicial
+    reverse(camino.begin(), camino.end()); // Invertir el camino
+    return camino;
+}
 int main() {
     int r, d, s;
     int case_num = 0;
@@ -82,11 +67,7 @@ int main() {
         // represent graphs as adjacents lists
         vector<vector<int>> doors_graph(r); // O(r) allocate r cells in memo
         vector<vector<int>> switches_graph(r); // O(r)
-        vector<int> lights_on(r, 0); // tracking rooms' lights 
-        lights_on[0] = 1;
         vector<bool> visited(r, false); // tracking visited rooms
-        visited[0] = true;
-        vector<string> track;
 
         for (int t = 0; t < d; t++) { // builds door_graph. Iterating over all edges O(d) 
             int i, j;
@@ -103,14 +84,12 @@ int main() {
             switches_graph[k - 1].push_back(l - 1);
         }
 
-        pair<int, vector<string>> sol = find_shortest_path(r, 0, 0, doors_graph, visited, switches_graph, lights_on, track);
+        unordered_map<int, int> tree = bfs(doors_graph, 0);
+        
+        vector<int> camino = encontrar_camino(tree, 0, r-1);
 
-        if (sol.first == -1) {
-            cout << "The problem cannot be solved." << endl;
-        } else {
-            for (string move: sol.second) {
-                cout << move << endl;
-            }
+        for (int paso: camino) {
+            cout << paso << endl;
         }
     }
 
