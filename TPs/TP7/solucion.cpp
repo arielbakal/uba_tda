@@ -1,18 +1,17 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <queue>
 #include <vector>
-#include <unordered_map>
 using namespace std;
 
 // NOTES: 
 // Solve with BFS. Remove unnecesary includes
 
-unordered_map<int, int> bfs(const vector<vector<int>>& grafo, int nodo_inicial) {
-
+vector<int> bfs(const vector<vector<int>>& grafo, int nodo_inicial, int nodo_final) {
     vector<bool> visitados(grafo.size(), false);
     queue<int> cola;
-    unordered_map<int, int> padres;
+    vector<int> padres(grafo.size(), -1); // Inicializamos padres a -1 (sin padre)
+    vector<int> camino;
 
     cola.push(nodo_inicial);
     visitados[nodo_inicial] = true;
@@ -20,6 +19,17 @@ unordered_map<int, int> bfs(const vector<vector<int>>& grafo, int nodo_inicial) 
     while (!cola.empty()) {
         int nodo_actual = cola.front();
         cola.pop();
+
+        if (nodo_actual == nodo_final) {
+            // Reconstruir el camino desde el nodo final hasta el inicial
+            while (nodo_actual != nodo_inicial) {
+                camino.push_back(nodo_actual);
+                nodo_actual = padres[nodo_actual];
+            }
+            camino.push_back(nodo_inicial);
+            reverse(camino.begin(), camino.end()); // Invertir el camino
+            return camino;
+        }
 
         for (int vecino : grafo[nodo_actual]) {
             if (!visitados[vecino]) {
@@ -29,29 +39,9 @@ unordered_map<int, int> bfs(const vector<vector<int>>& grafo, int nodo_inicial) 
             }
         }
     }
-
-    return padres;
+    return camino;  // Retornamos un vector vacío si no se encuentra el camino
 }
 
-vector<int> encontrar_camino(const unordered_map<int, int>& padres, int inicio, int fin) {
-    vector<int> camino;
-    int nodo_actual = fin;
-
-    while (nodo_actual != inicio) {
-        // Usamos at() en lugar de [] para acceder a elementos en un unordered_map const
-        auto it = padres.find(nodo_actual);
-        if (it != padres.end()) {  // Verificar si el nodo tiene un padre
-            camino.push_back(nodo_actual);
-            nodo_actual = it->second;  // Obtener el valor (padre) del iterador
-        } else {
-            return {}; // No se encontró un camino
-        }
-    }
-
-    camino.push_back(inicio); // Agregar el nodo inicial
-    reverse(camino.begin(), camino.end()); // Invertir el camino
-    return camino;
-}
 int main() {
     int r, d, s;
     int case_num = 0;
@@ -84,9 +74,7 @@ int main() {
             switches_graph[k - 1].push_back(l - 1);
         }
 
-        unordered_map<int, int> tree = bfs(doors_graph, 0);
-        
-        vector<int> camino = encontrar_camino(tree, 0, r-1);
+        vector<int> camino = bfs(doors_graph, 0, r-1);
 
         for (int paso: camino) {
             cout << paso << endl;
