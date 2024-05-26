@@ -1,6 +1,8 @@
 ## Técnicas de Diseño de Algoritmos 1C2024 (ex Algo 3)
 
-#### Trabajos Prácticos*
+### Trabajos Prácticos*
+
+#### Primer Parcial
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
@@ -12,5 +14,11 @@
 | 6: Greedy II | ([vjudge](https://vjudge.net/problem/CodeForces-1215C)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP6/solucion.cpp) | C++ | Approved | 186ms < 2000ms |
 | 7: Graphs I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-321)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/solucion.cpp) | C++ |In Process |  |
 | 8: Graphs II |  ([vjudge](https://vjudge.net/problem/UVA-10765)) |  |  | Not Implemented |  |
+
+#### Segundo Parcial
+
+| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
+|-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
+| 1: Minimum Spanning Tree | ([vjudge](https://vjudge.net/problem/UVA-1235)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/sol.py) | Python | In Process | |
 
 *Los TPs son problemas publicados en [vjudge](https://vjudge.net/)
