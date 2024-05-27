@@ -26,16 +26,14 @@ def keys_dist(key1, key2):
         res += single_key_dist(key1[i], key2[i])
     return res
 
-# Since im building a complete graph, i choose doing an adj matrix with its weights
-
-def build_graph(keys):
-    adj_matrix = []
+def build_graph(keys): # represent graph as ad list with neighbors as a pair(neighbor, weight to that neighbor)
+    adj_list = {}
     for key1 in keys:
-        weights = []
+        neighbors = []
         for key2 in keys:
             if key1 != key2:
-                weights.append(keys_dist(key1, key2))
-            else:
-                weights.append(0)
-        adj_matrix.append(weights) 
-    return adj_matrix
+                neighbors.append([key2, keys_dist(key1, key2)])
+        adj_list[key1] = neighbors
+    return adj_list
+
+print(build_graph(keys_global[1]))
