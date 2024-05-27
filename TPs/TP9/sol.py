@@ -15,5 +15,17 @@ for _ in range(T):
     keys = [tuple(int(d) for d in key) for key in keys] 
     keys_global.append(keys)
     
+def keys_dist(a, b):
+    distance = abs(a - b)
+    return min(distance, 10 - distance)
 
+def build_graph(keys):
+    adj_list = {}
+    for key1 in keys:
+        neighbors = []
+        for key2 in keys:
+            if key1 != key2:
+                neighbors.append(key2)
+        adj_list[key1] = neighbors
+    return adj_list
 
