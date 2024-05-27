@@ -1,3 +1,5 @@
+# NOTES: translate to cpp
+
 def single_key_dist(a, b):
     distance = abs(a - b)
     return min(distance, 10 - distance)
