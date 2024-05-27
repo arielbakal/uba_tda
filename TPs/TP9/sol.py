@@ -1,21 +1,3 @@
-# Notes: 
-# 1. Armo un grafo con las keys como nodos incluyendo 0000
-# 2a. Calculo todos los pesos (distancias entre keys)
-# 2b. Si |a-b|>5, 10-|a-b| else |a-b|
-# 3. Armo un AGM enraizado en 0000
-# 4. El resultado es la suma de las aristas del AGM
-
-T = int(input()) # test cases
-keys_global = []
-
-for _ in range(T):
-    safe = input().split()
-    N = int(safe[0])
-    keys = [safe[i] for i in range(1, N+1)]
-    keys = [tuple(int(d) for d in key) for key in keys] 
-    keys.insert(0, (0, 0, 0 ,0))
-    keys_global.append(keys)
-    
 def single_key_dist(a, b):
     distance = abs(a - b)
     return min(distance, 10 - distance)
@@ -42,15 +24,16 @@ def prim_min_cost(graph):
     total_cost = 0
     visited = [(0, 0, 0 ,0)]
 
-    for _ in range(len(graph)):
+    for _ in range(len(graph)-1):
         min_dist = float('inf')
         min_key = None
         for key in graph.keys():
             if key not in visited:
                 for neighbor in graph[key]:
-                    if neighbor[1] < min_dist:
-                        min_dist = neighbor[1]
-                        min_key = key
+                    if neighbor[0] in visited:
+                        if neighbor[1] < min_dist:
+                            min_dist = neighbor[1]
+                            min_key = key
 
         if min_key is None:  
             break
@@ -60,8 +43,18 @@ def prim_min_cost(graph):
 
     return total_cost
 
+T = int(input()) # test cases
+keys_global = []
+
+for _ in range(T):
+    safe = input().split()
+    N = int(safe[0])
+    keys = [safe[i] for i in range(1, N+1)]
+    keys = [tuple(int(d) for d in key) for key in keys] 
+    keys.insert(0, (0, 0, 0 ,0))
+    keys_global.append(keys)
+
 for i in range(T):
     graph = build_graph(keys_global[i])
     min_cost = prim_min_cost(graph)
     print(min_cost)
-
