@@ -58,3 +58,4 @@ for i in range(T):
     graph = build_graph(keys_global[i])
     min_cost = prim_min_cost(graph)
     print(min_cost)
+    
