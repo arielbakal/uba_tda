@@ -27,6 +27,23 @@ int keys_dist(Key key1, Key key2) {
     return distance;
 }
 
+pair<int, int> min_start_cost(vector<Key> keys, int N) {
+    int min_dist = 100000;
+    int min_key;
+    Key init;
+    for (int k = 0; k < 4; k++) {
+        init[k] = 0;
+    }
+    for (int i=0; i<N; i++) {
+        int dist = keys_dist(init, keys[i]);
+        if (dist < min_dist) {
+            min_key = i;
+            min_dist = dist;
+        }
+    }
+    return pair<int, int>({min_dist, min_key});
+}
+
 unordered_map<int, vector<pair<int, int>>> build_graph(vector<Key> keys, int N) {
     unordered_map<int, vector<pair<int, int>>> adj_list;
     for (int i=0; i<N; i++) {
@@ -38,6 +55,8 @@ unordered_map<int, vector<pair<int, int>>> build_graph(vector<Key> keys, int N) 
     }
     return adj_list;
 }
+
+
 
 int prim_min_cost(unordered_map<int, vector<pair<int, int>>> graph, int starting_cost, int starting_key, int N) {
     int total_cost = starting_cost;
