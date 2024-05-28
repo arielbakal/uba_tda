@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <array>
@@ -36,6 +37,36 @@ unordered_map<int, vector<pair<int, int>>> build_graph(vector<Key> keys, int N) 
         }
     }
     return adj_list;
+}
+
+int prim_min_cost(unordered_map<int, vector<pair<int, int>>> graph, int starting_cost, int starting_key, int N) {
+    int total_cost = starting_cost;
+    vector<int> visited;
+    visited.push_back(starting_key);
+
+    for (int i=0; i<N; i++) {
+        int min_dist = 1000000;
+        int min_key = -1;
+        for (int j=0; j<N; j++) {
+            if (find(visited.begin(), visited.end(), j) == visited.end()) { 
+                for (pair<int, int> neighbor: graph[j]) {
+                    if (find(visited.begin(), visited.end(), neighbor.first) == visited.end()) { 
+                        if (neighbor.second < min_dist) {
+                            min_dist = neighbor.second;
+                            min_key = j;
+                        }
+                    }
+                }
+            }
+        }
+        if (min_key == -1) {
+            return total_cost;
+        }
+        visited.push_back(min_key);
+        total_cost += min_dist;
+    }
+
+    return total_cost;
 }
 
 int main() {
