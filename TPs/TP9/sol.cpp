@@ -3,6 +3,7 @@
 #include <string>
 #include <array>
 #include <cstdlib>
+#include <unordered_map>
 using namespace std;
 
 typedef array<int, 4> Key; 
@@ -25,6 +26,18 @@ int keys_dist(Key key1, Key key2) {
     return distance;
 }
 
+unordered_map<int, vector<pair<int, int>>> build_graph(vector<Key> keys, int N) {
+    unordered_map<int, vector<pair<int, int>>> adj_list;
+    for (int i=0; i<N; i++) {
+        for (int j=0; j<N; j++) {
+            if (i != j) {
+                adj_list[i].push_back({j, keys_dist(keys[i], keys[j])});
+            }
+        }
+    }
+    return adj_list;
+}
+
 int main() {
     int T; cin >> T;
 
@@ -44,10 +57,20 @@ int main() {
             init[k] = 0;
         }
         
-        for(Key key: keys) {
-            cout << keys_dist(init, key) << " ";
+        unordered_map<int, vector<pair<int, int>>> graph = build_graph(keys, N);
+        
+        for (const auto& par : graph) {
+            int clave = par.first;
+            const vector<pair<int, int>>& valores = par.second;
+    
+            cout << "Clave: " << clave << ", Valores: ";
+            for (const auto& valor : valores) {
+                cout << "(" << valor.first << ", " << valor.second << ") ";
+            }
+            cout << endl;
         }
-        cout << endl;
+        
+        
     }
 
     return 0;
