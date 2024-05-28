@@ -56,8 +56,6 @@ unordered_map<int, vector<pair<int, int>>> build_graph(vector<Key> keys, int N) 
     return adj_list;
 }
 
-
-
 int prim_min_cost(unordered_map<int, vector<pair<int, int>>> graph, int starting_cost, int starting_key, int N) {
     int total_cost = starting_cost;
     vector<int> visited;
@@ -108,19 +106,12 @@ int main() {
         }
         
         unordered_map<int, vector<pair<int, int>>> graph = build_graph(keys, N);
+
+        pair<int, int> start = min_start_cost(keys, N);
+
+        int min_cost = prim_min_cost(graph, start.first, start.second, N);
         
-        for (const auto& par : graph) {
-            int clave = par.first;
-            const vector<pair<int, int>>& valores = par.second;
-    
-            cout << "Clave: " << clave << ", Valores: ";
-            for (const auto& valor : valores) {
-                cout << "(" << valor.first << ", " << valor.second << ") ";
-            }
-            cout << endl;
-        }
-        
-        
+        cout << min_cost << endl;        
     }
 
     return 0;
