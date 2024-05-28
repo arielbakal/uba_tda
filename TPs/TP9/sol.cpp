@@ -3,10 +3,11 @@
 #include <string>
 #include <array>
 #include <cstdlib>
-
 using namespace std;
 
-vector<array<int, 4>> keys;
+typedef array<int, 4> Key; 
+
+vector<Key> keys;
 
 int single_key_dist(int a, int b) {
     int distance = abs(a-b);
@@ -16,7 +17,7 @@ int single_key_dist(int a, int b) {
     return 10-distance;
 }
 
-int keys_dist(array<int, 4> key1, array<int, 4> key2) {
+int keys_dist(Key key1, Key key2) {
     int distance = 0;
     for (int i=0; i<4; i++) {
         distance += single_key_dist(key1[i], key2[i]);
@@ -38,12 +39,12 @@ int main() {
             }
         }
         
-        array<int, 4> init;
+        Key init;
         for (int k = 0; k < 4; k++) {
             init[k] = 0;
         }
         
-        for(array<int, 4> key: keys) {
+        for(Key key: keys) {
             cout << keys_dist(init, key) << " ";
         }
         cout << endl;
