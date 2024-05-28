@@ -10,6 +10,16 @@ def keys_dist(key1, key2):
         res += single_key_dist(key1[i], key2[i])
     return res
 
+def min_start_cost(keys):
+    min_dist = float('inf')
+    min_key = (0, 0, 0, 0)
+    for key in keys:
+        dist = keys_dist((0, 0, 0, 0), key) 
+        if dist < min_dist:
+            min_key = key
+            min_dist = dist
+    return min_dist, min_key
+
 def build_graph(keys): # represent graph as adj list with neighbors as a pair<neighbor, weight to that neighbor>
     adj_list = {}
     for key1 in keys:
@@ -22,11 +32,11 @@ def build_graph(keys): # represent graph as adj list with neighbors as a pair<ne
 
 # Since graph is complete, m ∈ Ω(n^2) => I should use Prim trivial impl O(n^2) rather than heap impl O((m+n)logn) = O(n^2logn). Bc O(n^2) < O(n^2logn)
 
-def prim_min_cost(graph):
-    total_cost = 0
-    visited = [(0, 0, 0 ,0)]
+def prim_min_cost(graph, starting_cost, starting_key):
+    total_cost = starting_cost
+    visited = [starting_key]
 
-    for _ in range(len(graph)-1):
+    for _ in range(len(graph)):
         min_dist = float('inf')
         min_key = None
         for key in graph.keys():
@@ -53,11 +63,10 @@ for _ in range(T):
     N = int(safe[0])
     keys = [safe[i] for i in range(1, N+1)]
     keys = [tuple(int(d) for d in key) for key in keys] 
-    keys.insert(0, (0, 0, 0 ,0))
     keys_global.append(keys)
 
 for i in range(T):
     graph = build_graph(keys_global[i])
-    min_cost = prim_min_cost(graph)
+    starting_cost, starting_key = min_start_cost(keys_global[i])
+    min_cost = prim_min_cost(graph, starting_cost, starting_key)
     print(min_cost)
-    
