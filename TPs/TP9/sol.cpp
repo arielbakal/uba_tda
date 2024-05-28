@@ -65,7 +65,7 @@ int prim_min_cost(unordered_map<int, vector<pair<int, int>>> graph, int starting
         int min_dist = 1000000;
         int min_key = -1;
         for (int j=0; j<N; j++) {
-            if (find(visited.begin(), visited.end(), j) == visited.end()) { 
+            if (find(visited.begin(), visited.end(), j) != visited.end()) { 
                 for (pair<int, int> neighbor: graph[j]) {
                     if (find(visited.begin(), visited.end(), neighbor.first) == visited.end()) { 
                         if (neighbor.second < min_dist) {
