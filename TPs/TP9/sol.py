@@ -1,5 +1,3 @@
-# NOTES: translate to cpp
-
 # 1. Build adj list where each neighbor has its cost, excluding 0000
 # 2. Calculate distances between 0000 and all keys, then get min_dist (also starting_cost) and starting_key.
 # This will be our starting key for Prim. We cant start from 0000 or include it on the graph bc we cant JUMP there.
