@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include <array>
 #include <cstdlib>
 #include <unordered_map>
 using namespace std;
@@ -28,7 +27,7 @@ int keys_dist(string key1, string key2) {
 }
 
 pair<int, string> min_start_cost(vector<string> keys, int N) {
-    int min_dist = 100000;
+    int min_dist = 26;
     string min_key;
     string init = "0000";
     for (string key: keys) {
@@ -55,17 +54,18 @@ unordered_map<string, vector<pair<string, int>>> build_graph(vector<string> keys
 
 int prim_min_cost(unordered_map<string, vector<pair<string, int>>> graph, int starting_cost, string starting_key, int N) {
     int total_cost = starting_cost;
-    vector<string> visited;
-    visited.push_back(starting_key);
+    unordered_map<string, bool> visited;
+    visited[starting_key] = true;
 
     for (int i=0; i<N; i++) {
-        int min_dist = 1000000;
-        string min_key = "";
+        int min_dist = 26;
+        string min_key = "-1";
         for (const auto& node: graph) {
             string key = node.first;
-            if (find(visited.begin(), visited.end(), key) != visited.end()) { 
-                for (const auto& neighbor: graph[key]) {
-                    if (find(visited.begin(), visited.end(), neighbor.first) == visited.end()) { 
+            if (!(visited[key])) { 
+                vector<pair<string, int>> neighbors = graph[key];
+                for (pair<string, int> neighbor: neighbors) {
+                    if (visited[neighbor.first]) { 
                         if (neighbor.second < min_dist) {
                             min_dist = neighbor.second;
                             min_key = key;
@@ -74,10 +74,10 @@ int prim_min_cost(unordered_map<string, vector<pair<string, int>>> graph, int st
                 }
             }
         }
-        if (min_key == "") {
+        if (min_key == "-1") {
             return total_cost;
         }
-        visited.push_back(min_key);
+        visited[min_key] = true;
         total_cost += min_dist;
     }
 
@@ -101,7 +101,7 @@ int main() {
 
         int min_cost = prim_min_cost(graph, start.first, start.second, N);
         
-        cout << min_cost << endl;        
+        cout << min_cost << endl;
     }
 
     return 0;
