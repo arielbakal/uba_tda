@@ -100,11 +100,6 @@ int main() {
             }
         }
         
-        Key init;
-        for (int k = 0; k < 4; k++) {
-            init[k] = 0;
-        }
-        
         unordered_map<int, vector<pair<int, int>>> graph = build_graph(keys, N);
 
         pair<int, int> start = min_start_cost(keys, N);
