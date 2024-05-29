@@ -7,9 +7,7 @@
 #include <unordered_map>
 using namespace std;
 
-typedef array<int, 4> Key; 
-
-vector<Key> keys;
+vector<string> keys;
 
 int single_key_dist(int a, int b) {
     int distance = abs(a-b);
@@ -19,64 +17,64 @@ int single_key_dist(int a, int b) {
     return 10-distance;
 }
 
-int keys_dist(Key key1, Key key2) {
+int keys_dist(string key1, string key2) {
     int distance = 0;
     for (int i=0; i<4; i++) {
-        distance += single_key_dist(key1[i], key2[i]);
+        int a = key1[i] - '0';
+        int b = key2[i] - '0';
+        distance += single_key_dist(a, b);
     }
     return distance;
 }
 
-pair<int, int> min_start_cost(vector<Key> keys, int N) {
+pair<int, string> min_start_cost(vector<string> keys, int N) {
     int min_dist = 100000;
-    int min_key;
-    Key init;
-    for (int k = 0; k < 4; k++) {
-        init[k] = 0;
-    }
-    for (int i=0; i<N; i++) {
-        int dist = keys_dist(init, keys[i]);
+    string min_key;
+    string init = "0000";
+    for (string key: keys) {
+        int dist = keys_dist(init, key);
         if (dist < min_dist) {
-            min_key = i;
+            min_key = key;
             min_dist = dist;
         }
     }
-    return pair<int, int>({min_dist, min_key});
+    return pair<int, string>({min_dist, min_key});
 }
 
-unordered_map<int, vector<pair<int, int>>> build_graph(vector<Key> keys, int N) {
-    unordered_map<int, vector<pair<int, int>>> adj_list;
-    for (int i=0; i<N; i++) {
-        for (int j=0; j<N; j++) {
-            if (i != j) {
-                adj_list[i].push_back({j, keys_dist(keys[i], keys[j])});
+unordered_map<string, vector<pair<string, int>>> build_graph(vector<string> keys, int N) {
+    unordered_map<string, vector<pair<string, int>>> adj_list;
+    for (const auto& key1: keys) {
+        for (const auto& key2: keys) {
+            if (key1 != key2) {
+                adj_list[key1].push_back({key2, keys_dist(key1, key2)});
             }
         }
     }
     return adj_list;
 }
 
-int prim_min_cost(unordered_map<int, vector<pair<int, int>>> graph, int starting_cost, int starting_key, int N) {
+int prim_min_cost(unordered_map<string, vector<pair<string, int>>> graph, int starting_cost, string starting_key, int N) {
     int total_cost = starting_cost;
-    vector<int> visited;
+    vector<string> visited;
     visited.push_back(starting_key);
 
     for (int i=0; i<N; i++) {
         int min_dist = 1000000;
-        int min_key = -1;
-        for (int j=0; j<N; j++) {
-            if (find(visited.begin(), visited.end(), j) != visited.end()) { 
-                for (pair<int, int> neighbor: graph[j]) {
+        string min_key = "";
+        for (const auto& node: graph) {
+            string key = node.first;
+            if (find(visited.begin(), visited.end(), key) != visited.end()) { 
+                for (const auto& neighbor: graph[key]) {
                     if (find(visited.begin(), visited.end(), neighbor.first) == visited.end()) { 
                         if (neighbor.second < min_dist) {
                             min_dist = neighbor.second;
-                            min_key = j;
+                            min_key = key;
                         }
                     }
                 }
             }
         }
-        if (min_key == -1) {
+        if (min_key == "") {
             return total_cost;
         }
         visited.push_back(min_key);
@@ -93,16 +91,13 @@ int main() {
         int N; cin >> N;
         keys.resize(N);
 
-        for(int j=0; j<N; j++) {
-            string key_str; cin >> key_str;
-            for (int k = 0; k < 4; k++) {
-                keys[j][k] = key_str[k] - '0';
-            }
-        }
+        for (int i = 0; i<N; i++) {
+            cin >> keys[i]; 
+        }   
         
-        unordered_map<int, vector<pair<int, int>>> graph = build_graph(keys, N);
+        unordered_map<string, vector<pair<string, int>>> graph = build_graph(keys, N);
 
-        pair<int, int> start = min_start_cost(keys, N);
+        pair<int, string> start = min_start_cost(keys, N);
 
         int min_cost = prim_min_cost(graph, start.first, start.second, N);
         
