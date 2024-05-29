@@ -6,6 +6,8 @@
 #include <unordered_map>
 using namespace std;
 
+// NOTES: solves but TLE
+
 vector<string> keys;
 
 int single_key_dist(int a, int b) {
