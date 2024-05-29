@@ -19,6 +19,6 @@
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
-| 1: Minimum Spanning Tree | ([vjudge](https://vjudge.net/problem/UVA-1235)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/sol.py) | C++ | Implemented | TLE |
+| 1: Minimum Spanning Tree | ([vjudge](https://vjudge.net/problem/UVA-1235)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/sol.py) | C++ | Approved | 2080ms < 3000ms |
 
 *Los TPs son problemas publicados en [vjudge](https://vjudge.net/)
