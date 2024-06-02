@@ -15,6 +15,20 @@ using namespace std;
 
 // 2. solve with dijkstra
 
+unordered_map<int, vector<int>> build_graph(vector<vector<int>> elevators_floors, int n) {
+    unordered_map<int, vector<int>> graph;
+
+    for (int i=0; i<n; i++) {
+        int elevator_index = 100+i;
+        for (int floor: elevators_floors[i]) {
+            graph[floor].push_back(elevator_index);
+            graph[elevator_index].push_back(floor);
+        }
+    }
+
+    return graph;
+
+}
 
 
 int main() {
@@ -42,6 +56,7 @@ int main() {
             }
         }
 
+        unordered_map<int, vector<int>> graph = build_graph(elevators_floors, n);
 
     }
     return 0;
