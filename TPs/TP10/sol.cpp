@@ -8,7 +8,7 @@ int main() {
     while (true) {
         int n; // n elevators
         int k; // objective k floor
-        cin >> n >> k;
+        if (!(cin >> n >> k)) break;
 
         vector<int> T(n); // each elevator's time between adjacent floors 
         for (int i = 0; i < n; i++) {
@@ -42,8 +42,6 @@ int main() {
             }
             cout << endl;
         }
-
-        break;
     }
     return 0;
 }
