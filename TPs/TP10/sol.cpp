@@ -28,20 +28,7 @@ int main() {
                 elevators_floors[j].push_back(number);
             }
         }
-
-        cout << n << " " << k << endl;
-
-        for (int i = 0; i < n; i++) {
-            cout << T[i] << " ";
-        }
-        cout << endl;
-
-        for (int i = 0; i < n; i++) {
-            for (int num : elevators_floors[i]) {
-                cout << num << " ";
-            }
-            cout << endl;
-        }
+        
     }
     return 0;
 }
