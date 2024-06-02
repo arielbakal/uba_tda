@@ -1,10 +1,21 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
 
-// NOTES: build graph and solve with dijkstra, this is sufficient for solving but could not solve in time. Start from there and go on
+// NOTES: build graph and solve with dijkstra, this is sufficient for solving but could not solve in time. Start from there and go on.
+
+// 1. build unordered_map<int, vector<pair<int, int>>> where floors are 0..99 and elevators 100..100+(n-1)
+// floors are not connected directly, they are connected by elevators.
+// floors only get elevators as neighbors, while elevator get both
+// we start in floor 0, and get from there to an elevator costs 0. Then switching between elevators (getting from elevator to floor then to other elevator)
+// should cost in total 60 (elev-30-floor-30-elev)
+
+// 2. solve with dijkstra
+
+
 
 int main() {
     while (true) {
@@ -30,6 +41,7 @@ int main() {
                 elevators_floors[j].push_back(number);
             }
         }
+
 
     }
     return 0;
