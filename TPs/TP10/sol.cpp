@@ -4,6 +4,8 @@
 
 using namespace std;
 
+// NOTES: build graph and solve with dijkstra, this is sufficient for solving but could not solve in time. Start from there and go on
+
 int main() {
     while (true) {
         int n; // n elevators
@@ -20,7 +22,7 @@ int main() {
         cin.ignore(); // to ignore the newline character left in the input buffer
 
         for (int j = 0; j < n; j++) {
-            string line;
+            string line;    
             getline(cin, line);
             istringstream iss(line);
             int number;
@@ -28,7 +30,7 @@ int main() {
                 elevators_floors[j].push_back(number);
             }
         }
-        
+
     }
     return 0;
 }
