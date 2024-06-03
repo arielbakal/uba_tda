@@ -160,7 +160,7 @@ int main() {
 
             int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
 
-            if (min_seconds == 10000 || min_seconds == 0) {
+            if (min_seconds == 10000) {
                 cout << "IMPOSSIBLE" << endl;
             } else {
                 cout << min_seconds << endl;
