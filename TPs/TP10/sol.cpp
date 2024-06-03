@@ -2,6 +2,7 @@
 #include <sstream>
 #include <map>
 #include <vector>
+#include <queue>
 #include <unordered_map>
 #include <cstdlib>
 
@@ -22,7 +23,13 @@ struct hash_pair {
     }
 };
 
-map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vector<int> T, int n) {
+struct Compare {
+    bool operator() (const std::pair<node, int>& a, const std::pair<node, int>& b) {
+        return a.second > b.second; // Min-heap based on distance
+    }
+};
+
+map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vector<int> T, int n, int target) {
     map<node, map<node, int>> graph;
 
     for (int i=0; i<n; i++) {
@@ -37,7 +44,7 @@ map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vect
         }
     }
     for (int i=0; i<n; i++) {
-        for (int j=0; i<n; i++) {
+        for (int j=0; j<n; j++) {
             if (i != j) {
                 for (int floor1: elevators_floors[i]) {
                     for (int floor2: elevators_floors[j]) {
@@ -50,9 +57,67 @@ map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vect
             }
         }
     }
+    for (int i=0; i<n; i++) {
+        for (int floor: elevators_floors[i]) {
+            if (floor == 0) {
+                graph[{0,-1}][{0, i}] = 0;
+                graph[{0, i}][{0, -1}] = 0;
+            } else if (floor == target) {
+                graph[{target,-1}][{target, i}] = 0;
+                graph[{target, i}][{target, -1}] = 0;
+            }
+        }
+    }
     return graph;
 }
 
+
+int dijkstra(map<node, map<node, int>> graph, node source, node target) {
+    int inf = 10000; // travel time cant exceed 100 seconds x 100 floors;
+
+    priority_queue<pair<node, int>, vector<pair<node, int>>, Compare> pq;
+    unordered_map<node, int, hash_pair> distance;
+
+    // Initialize distances to INF
+    for (const auto& node : graph) {
+        distance[node.first] = inf;
+    }
+    distance[source] = 0;
+    pq.push({source, 0});
+
+    while (!pq.empty()) {
+        node current = pq.top().first;
+        int currentDist = pq.top().second;
+        pq.pop();
+        
+        // Early exit if we reach the target
+        if (current == target) {
+            return currentDist;
+        }
+        
+        // If this distance is not the smallest known, skip
+        if (currentDist > distance[current]) {
+            continue;
+        }
+        
+        // Explore neighbors
+        for (const auto& neighbor : graph.at(current)) {
+            node next = neighbor.first;
+            int weight = neighbor.second;
+            int newDist = currentDist + weight;
+            
+            if (newDist < distance[next]) {
+                distance[next] = newDist;
+                pq.push({next, newDist});
+            }
+        }
+    }
+    
+    // Return the minimum distance to the target, or INF if unreachable
+    return distance[target];
+
+
+}
 
 int main() {
     while (true) {
@@ -78,15 +143,11 @@ int main() {
                 elevators_floors[j].push_back(number);
             }
         }
-        map<node, map<node, int>> graph = build_graph(elevators_floors, T, n);
+        map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k);
 
-        for (const auto& source : graph) {
-            std::cout << "Node (" << source.first.first << ", " << source.first.second << ") has edges:\n";
-            for (const auto& dest : source.second) {
-                std::cout << "  -> (" << dest.first.first << ", " << dest.first.second << ") with cost " << dest.second << "\n";
-            }
-        }
+        int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
 
+        cout << min_seconds << endl;
     }
     return 0;
 }
