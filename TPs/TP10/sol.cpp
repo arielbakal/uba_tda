@@ -36,7 +36,8 @@ struct Compare {
 map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vector<int> T, int n, int target) {
     map<node, map<node, int>> graph;
 
-    for (int i=0; i<n; i++) {
+    // build nodes for each state (elevator)
+    for (int i=0; i<n; i++) { // iterate over elevators
         for (int floor1: elevators_floors[i]) {
             for (int floor2: elevators_floors[i]) {
                 if (floor1 != floor2) {
@@ -47,6 +48,7 @@ map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vect
             }
         }
     }
+    // build nodes for each floor sharing states (elevators)
     for (int i=0; i<n; i++) {
         for (int j=0; j<n; j++) {
             if (i != j) {
@@ -61,6 +63,7 @@ map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vect
             }
         }
     }
+    // build (0, -1) and (target, -1) nodes and connecting them to (0, i) and (target, i) nodes resp. (i=0..n-1) 
     for (int i=0; i<n; i++) {
         for (int floor: elevators_floors[i]) {
             if (floor == 0) {
