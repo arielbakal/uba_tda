@@ -134,6 +134,8 @@ int main() {
 
         cin.ignore(); // to ignore the newline character left in the input buffer
 
+        bool is_possible = false;
+
         for (int j = 0; j < n; j++) {
             string line;    
             getline(cin, line);
@@ -141,17 +143,26 @@ int main() {
             int number;
             while (iss >> number) {
                 elevators_floors[j].push_back(number);
+                if (number == k) is_possible = true;
             }
         }
-        map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k);
 
-        int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
-        
-        if (min_seconds == 10000 || min_seconds == 0) {
+        if (!is_possible) {
             cout << "IMPOSSIBLE" << endl;
+        } else if (k == 0) {
+            cout << 0 << endl;
         } else {
-            cout << min_seconds << endl;
+            map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k);
+
+            int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
+
+            if (min_seconds == 10000 || min_seconds == 0) {
+                cout << "IMPOSSIBLE" << endl;
+            } else {
+                cout << min_seconds << endl;
+            }
         }
+        
     }
     return 0;
 }
