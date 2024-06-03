@@ -91,16 +91,16 @@ int dijkstra(map<node, map<node, int>> graph, node source, node target) {
 
     while (!pq.empty()) {
         node current = pq.top().first;
-        int currentDist = pq.top().second;
+        int current_dist = pq.top().second;
         pq.pop();
         
         // return if we reach target
         if (current == target) {
-            return currentDist;
+            return current_dist;
         }
         
         // skip smaller distances
-        if (currentDist > distance[current]) {
+        if (current_dist > distance[current]) {
             continue;
         }
 
@@ -113,12 +113,12 @@ int dijkstra(map<node, map<node, int>> graph, node source, node target) {
         for (const auto& neighbor : graph.at(current)) {
             node next = neighbor.first;
             int weight = neighbor.second;
-            int newDist = currentDist + weight;
+            int new_dist = current_dist + weight;
             
             // update distances
-            if (newDist < distance[next]) {
-                distance[next] = newDist;
-                pq.push({next, newDist});
+            if (new_dist < distance[next]) {
+                distance[next] = new_dist;
+                pq.push({next, new_dist});
             }
         }
     }
