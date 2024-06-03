@@ -146,8 +146,12 @@ int main() {
         map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k);
 
         int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
-
-        cout << min_seconds << endl;
+        
+        if (min_seconds == 10000 || min_seconds == 0) {
+            cout << "IMPOSSIBLE" << endl;
+        } else {
+            cout << min_seconds << endl;
+        }
     }
     return 0;
 }
