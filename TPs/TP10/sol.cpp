@@ -9,10 +9,12 @@
 using namespace std;
 using node = pair<int, int>; // node = (floor, elevator);
 
-// NOTES: build graph and solve with dijkstra, this is sufficient for solving but could not solve in time. Start from there and go on.
-
-// 1. build graph as floor nodes with elevator states, and get costs between floors of same state.
-// 2. solve with dijkstra
+// 1. Build graph as floor nodes with elevator states, and get costs between floors of same state.
+// I used node (0, -1) and (target, -1) as nodes that are connected to all (0, i), (target, i) i=(0..n-1) resp. with cost 0.
+// This nodes are fixed starting and target nodes for all test cases. 
+// We could have multiple elevators that starts on floor 0 or reaches floor target
+// (We avoid iterating dijkstra for each starting node with elevator in floor 0).
+// 2. Solve with dijkstra
 
 struct hash_pair {
     template <class T1, class T2>
@@ -25,10 +27,12 @@ struct hash_pair {
 
 struct Compare {
     bool operator() (const std::pair<node, int>& a, const std::pair<node, int>& b) {
-        return a.second > b.second; // Min-heap based on distance
+        return a.second > b.second; 
     }
 };
 
+// unordered_map with node=pair<int, int> as key and pair<node, cost> as values.
+// (needed to implement hash and compare_node functions since cpp dont support that type of key. Messy but i wanted to learn how to impl that)
 map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vector<int> T, int n, int target) {
     map<node, map<node, int>> graph;
 
@@ -78,7 +82,7 @@ int dijkstra(map<node, map<node, int>> graph, node source, node target) {
     priority_queue<pair<node, int>, vector<pair<node, int>>, Compare> pq;
     unordered_map<node, int, hash_pair> distance;
 
-    // Initialize distances to INF
+    // initialize distances to INF
     for (const auto& node : graph) {
         distance[node.first] = inf;
     }
@@ -90,37 +94,36 @@ int dijkstra(map<node, map<node, int>> graph, node source, node target) {
         int currentDist = pq.top().second;
         pq.pop();
         
-        // Early exit if we reach the target
+        // return if we reach target
         if (current == target) {
             return currentDist;
         }
         
-        // If this distance is not the smallest known, skip
+        // skip smaller distances
         if (currentDist > distance[current]) {
             continue;
         }
 
+        // skip if node not in graph
         if (graph.find(current) == graph.end()) {
-            continue; // Skip if current node is not in the graph
+            continue; 
         }
         
-        // Explore neighbors
+        // explore neighbors
         for (const auto& neighbor : graph.at(current)) {
             node next = neighbor.first;
             int weight = neighbor.second;
             int newDist = currentDist + weight;
             
+            // update distances
             if (newDist < distance[next]) {
                 distance[next] = newDist;
                 pq.push({next, newDist});
             }
         }
     }
-    
-    // Return the minimum distance to the target, or INF if unreachable
-    return distance[target];
 
-
+    return distance[target]; // return min dist to target, if INF then is unreachable
 }
 
 int main() {
@@ -134,12 +137,13 @@ int main() {
             cin >> T[i]; 
         }
 
-        vector<vector<int>> elevators_floors(n);
+        vector<vector<int>> elevators_floors(n); // vector<floor> for each elevator
 
         cin.ignore(); // to ignore the newline character left in the input buffer
 
         bool is_possible = false;
 
+        // read entire line, split up numbers and save (didnt know when to stop iterating for each elevator)
         for (int j = 0; j < n; j++) {
             string line;    
             getline(cin, line);
@@ -147,16 +151,16 @@ int main() {
             int number;
             while (iss >> number) {
                 elevators_floors[j].push_back(number);
-                if (number == k) is_possible = true;
+                if (number == k) is_possible = true; // early check if target is reachable
             }
         }
 
-        if (!is_possible) {
+        if (!is_possible) { // if target unreachable, then just return IMPOSSIBLE
             cout << "IMPOSSIBLE" << endl;
-        } else if (k == 0) {
+        } else if (k == 0) { // if target is 0, then just return 0 (we start there)
             cout << 0 << endl;
         } else {
-            map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k);
+            map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k); 
 
             int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
 
