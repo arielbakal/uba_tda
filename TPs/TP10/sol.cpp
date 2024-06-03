@@ -14,6 +14,12 @@ using node = pair<int, int>; // node = (floor, elevator);
 // 1. build graph as floor nodes with elevator states, and get costs between floors of same state.
 // 2. solve with dijkstra
 
+// CORE DUMP ON INPUT 
+// 1 36
+// 71
+// 7 12 14 20 23 24 25 26 27 28 34 35 36 37 42 44 45 47 49 50 53 59 62 67 72 81 83 85 88 95 98
+
+
 struct hash_pair {
     template <class T1, class T2>
     size_t operator() (const pair<T1, T2>& p) const {
