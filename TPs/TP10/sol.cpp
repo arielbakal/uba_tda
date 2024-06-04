@@ -25,8 +25,8 @@ struct hash_pair {
     }
 };
 
-struct Compare {
-    bool operator() (const std::pair<node, int>& a, const std::pair<node, int>& b) {
+struct compare_node {
+    bool operator() (const pair<node, int>& a, const pair<node, int>& b) {
         return a.second > b.second; 
     }
 };
@@ -37,20 +37,23 @@ map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vect
     map<node, map<node, int>> graph;
 
     // build nodes for each state (elevator)
-    for (int i=0; i<n; i++) { // iterate over elevators
-        for (int floor1: elevators_floors[i]) {
-            for (int floor2: elevators_floors[i]) {
-                if (floor1 != floor2) {
-                    int cost = T[i] * abs(floor1 - floor2);
-                    graph[{floor1, i}][{floor2, i}] = cost;
-                    graph[{floor2, i}][{floor1, i}] = cost;
+    for (int e=0; e<n; e++) { // iterate over elevators
+        int size = elevators_floors[e].size();
+        for (int i=0; i<size; i++) {
+            for (int j=i+1; j<size; j++) {
+                if (i != j) {
+                    int floor1 = elevators_floors[e][i];
+                    int floor2 = elevators_floors[e][j];
+                    int cost = T[e] * abs(floor1 - floor2);
+                    graph[{floor1, e}][{floor2, e}] = cost;
+                    graph[{floor2, e}][{floor1, e}] = cost;
                 }
             }
         }
     }
     // build nodes for each floor sharing states (elevators)
     for (int i=0; i<n; i++) {
-        for (int j=0; j<n; j++) {
+        for (int j=i+1; j<n; j++) {
             if (i != j) {
                 for (int floor1: elevators_floors[i]) {
                     for (int floor2: elevators_floors[j]) {
@@ -78,17 +81,17 @@ map<node, map<node, int>> build_graph(vector<vector<int>> elevators_floors, vect
     return graph;
 }
 
-
 int dijkstra(map<node, map<node, int>> graph, node source, node target) {
     int inf = 10000; // travel time cant exceed 100 seconds x 100 floors;
 
-    priority_queue<pair<node, int>, vector<pair<node, int>>, Compare> pq;
+    priority_queue<pair<node, int>, vector<pair<node, int>>, compare_node> pq;
     unordered_map<node, int, hash_pair> distance;
 
     // initialize distances to INF
     for (const auto& node : graph) {
         distance[node.first] = inf;
     }
+    
     distance[source] = 0;
     pq.push({source, 0});
 
@@ -125,7 +128,6 @@ int dijkstra(map<node, map<node, int>> graph, node source, node target) {
             }
         }
     }
-
     return distance[target]; // return min dist to target, if INF then is unreachable
 }
 
@@ -164,7 +166,6 @@ int main() {
             cout << 0 << endl;
         } else {
             map<node, map<node, int>> graph = build_graph(elevators_floors, T, n, k); 
-
             int min_seconds = dijkstra(graph, {0, -1}, {k, -1});
 
             if (min_seconds == 10000) {
