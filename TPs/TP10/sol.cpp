@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 using namespace std;
-using node = pair<int, int>; // node = (floor, elevator);
+using node = pair<int, int>; // node = (floor, elevator)
 
 // 1. Build graph as floor nodes with elevator states, and get costs between floors of same state.
 // I used node (0, -1) and (target, -1) as nodes that are connected to all (0, i), (target, i) i=(0..n-1) resp. with cost 0.
