@@ -7,7 +7,7 @@ using namespace std;
 // 1. Calculate distances between 0000 and all keys, then get min_dist (starting_cost) and starting_key.
 // This will be our starting key for Prim. We cant start from 0000 or include it on the keys we pass to Prim bc we cant JUMP there.
 // If we do it will generate an MST where 0000 could have multiples edges.
-// 3. Implement Prim only summing costs (we dont need to save fathers and recreate MST) 
+// 2. Implement Prim only summing costs (we dont need to save fathers and recreate MST) 
 // and using dynamic programming for distances (we calculate same distances several times).
 
 
