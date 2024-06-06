@@ -10,11 +10,10 @@ using namespace std;
 using node = pair<int, int>; // node = (floor, elevator)
 
 // 1. Build graph as floor nodes with elevator states, and get costs between floors of same state.
-// I used node (0, -1) and (target, -1) as nodes that are connected to all (0, i), (target, i) i=(0..n-1) resp. with cost 0.
-// This nodes are fixed starting and target nodes for all test cases. 
-// We could have multiple elevators that starts on floor 0 or reaches floor target
-// (We avoid iterating dijkstra for each starting node with elevator in floor 0).
-// 2. Solve with dijkstra
+// We create ghost nodes (0, -1), (target, -1) connected to all (0, i), (target, i) resp. with cost 0.
+// These nodes allows fixed starting and target nodes for all test cases and avoids multiple dijkstra iterations for
+// any number of floor 0 starting elevators.
+// 2. Solve with dijkstra (we only sum distances)
 
 struct hash_pair {
     template <class T1, class T2>
