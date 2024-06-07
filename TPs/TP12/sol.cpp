@@ -9,7 +9,6 @@
 // Total complexity: O(n*n^3 + (n-1)(n-1)^3 + ... + 1*1^3) = O(n^4 + (n-1)^4 + ... + 1^4) = O(n^4).
 // O(n^4) bounds any other operation complexity that can be in the code.
 
-
 using namespace std;
 
 int dijkstra(const vector<vector<int>>& graph, int source, int target, int n) {
@@ -44,12 +43,14 @@ int dijkstra(const vector<vector<int>>& graph, int source, int target, int n) {
     return distances[target];
 }
 
-int floyd(vector<vector<int>> graph, int n) {
+int floyd(vector<vector<int>> graph, int n, vector<bool> destroyed_towers) {
     int all_pair_sum = 0;
     for (int i=0; i<n; i++) {
         for (int j=0; j<n; j++) {
             if (i != j) {
-                all_pair_sum += dijkstra(graph, i, j, n);
+                if (!destroyed_towers[i] || !destroyed_towers[j]) {
+                    all_pair_sum += dijkstra(graph, i, j, n);
+                }
             }
         }
     }
@@ -74,9 +75,17 @@ int main() {
             cin >> tower_order[i];
         }
 
-        int test = floyd(power_matrix, n);
+        int total_cost = 0;
+        vector<bool> destroyed(n, false);
+        for (int tower: tower_order){
+            total_cost += floyd(graph, n, destroyed);
+            for (int i = 0; i < n; i++) {
+                power_matrix[tower][i] = INF;
+                power_matrix[i][tower] = INF;
+            }
+        }
 
-        cout << test;
+        cout << total_cost;
     }
 
     return 0;
