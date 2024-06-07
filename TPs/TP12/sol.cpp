@@ -25,6 +25,16 @@ void floydWarshall(vector<vector<int>>& graph, int n) {
     }
 }
 
+int graph_sum(vector<vector<int>> graph, int n) {
+    int result = 0;
+    for (int i = 0; i < n; i++) { 
+            for (int j = 0; j < n; j++) {
+            result += graph[i][j];
+        }
+    }
+    return result;
+}
+
 int destroy_towers_cost(vector<vector<int>>& graph, const vector<int>& tower_order, int n) {
     int total_cost = 0;
     
@@ -53,13 +63,7 @@ int main() {
 
         floydWarshall(power_matrix, n);
 
-        int result = 0;
-
-        for (int i = 0; i < n; i++) { // build power matrix
-            for (int j = 0; j < n; j++) {
-                result += power_matrix[i][j];
-            }
-        }
+        int result = graph_sum(power_matrix, n);
 
         cout << result << endl;
     }
