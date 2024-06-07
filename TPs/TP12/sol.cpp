@@ -9,6 +9,8 @@ using namespace std;
 // Total complexity: O(n*n^2 + (n-1)(n-1)^2 + ... + 1*1^2) = O(n^3 + (n-1)^3 + ... + 1^3)
 // Our complexity aproaches more to O(n^4) than O(n^3) 
 
+// NOTES: First iteration returns good, the problem is how i handle the graph after destroying towers. I should get the original graph each time.
+
 const int INF = INT_MAX;
 
 void floydWarshall(vector<vector<int>>& graph, int n) {
