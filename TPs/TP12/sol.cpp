@@ -44,6 +44,18 @@ int dijkstra(const vector<vector<int>>& graph, int source, int target, int n) {
     return distances[target];
 }
 
+int floyd(vector<vector<int>> graph, int n) {
+    int all_pair_sum = 0;
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<n; j++) {
+            if (i != j) {
+                all_pair_sum += dijkstra(graph, i, j, n);
+            }
+        }
+    }
+    return all_pair_sum;
+}
+
 int main() {
     int t; cin >> t;
 
@@ -61,7 +73,12 @@ int main() {
         for (int i = 0; i < n; i++) {
             cin >> tower_order[i];
         }
+
+        int test = floyd(power_matrix, n);
+
+        cout << test;
     }
 
     return 0;
 }
+    
