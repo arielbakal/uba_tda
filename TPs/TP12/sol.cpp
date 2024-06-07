@@ -29,18 +29,36 @@ int graph_sum(vector<vector<int>> graph, int n) {
     int result = 0;
     for (int i = 0; i < n; i++) { 
         for (int j = 0; j < n; j++) {
-            if (i!=j) result += graph[i][j];
+            if (i!=j && graph[i][j] < INF) result += graph[i][j];
         }
     }
     return result;
 }
 
-int destroy_towers_cost(vector<vector<int>>& graph, const vector<int>& tower_order, int n) {
+int destroy_towers_cost(vector<vector<int>>& graph, vector<int> tower_order, int n) {
     int total_cost = 0;
-    
+    floydWarshall(graph, n);
+
+    for (int k = 0; k < n; k++) {
+        int tower = tower_order[k];
+        int current_cost = 0;
+
+        current_cost += graph_sum(graph, n);
+
+        total_cost += current_cost;
+
+        // destroy tower by setting its row and column to INF
+        for (int i = 0; i < n; i++) {
+            graph[tower][i] = INF;
+            graph[i][tower] = INF;
+        }
+
+        // recalculate shortest paths ignoring the destroyed tower
+        floydWarshall(graph, n);
+    }
+
     return total_cost;
 }
-
 int main() {
     int t; 
     cin >> t;
@@ -61,9 +79,7 @@ int main() {
             cin >> tower_order[i];
         }
 
-        floydWarshall(power_matrix, n);
-
-        int result = graph_sum(power_matrix, n);
+        int result = destroy_towers_cost(power_matrix, tower_order, n);
 
         cout << result << endl;
     }
