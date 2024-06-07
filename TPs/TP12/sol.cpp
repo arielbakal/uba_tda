@@ -3,9 +3,8 @@
 #include <queue>
 #include <climits> 
 
-// 1. Dijkstra with queue (since we got nearly n^2 edges) O(n^2).
-// 2. Iterate over n towers and run dijkstra for all pairs of towers (note that while iterating we are removing towers from graph).
-// 3. Sum all costs.
+// We got an adj matrix, we can use Floyd-Warshall easily.
+// Floyd-Warshall O(n^3) for each tower while deleting them in each iteration.
 // Total complexity: O(n*n^2 + (n-1)(n-1)^2 + ... + 1*1^2) = O(n^3 + (n-1)^3 + ... + 1^3)
 // Our complexity aproaches more to O(n^4) than O(n^3) 
 
