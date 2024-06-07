@@ -28,8 +28,8 @@ void floydWarshall(vector<vector<int>>& graph, int n) {
 int graph_sum(vector<vector<int>> graph, int n) {
     int result = 0;
     for (int i = 0; i < n; i++) { 
-            for (int j = 0; j < n; j++) {
-            result += graph[i][j];
+        for (int j = 0; j < n; j++) {
+            if (i!=j) result += graph[i][j];
         }
     }
     return result;
