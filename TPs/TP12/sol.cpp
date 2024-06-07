@@ -3,6 +3,13 @@
 #include <queue>
 #include <climits> 
 
+// 1. Dijkstra with queue (since we got nearly n^2 edges) O(n^2).
+// 2. Iterate over n towers and run dijkstra for all pairs of towers (note that while iterating we are removing towers from graph).
+// 3. Sum all costs.
+// Total complexity: O(n*n^3 + (n-1)(n-1)^3 + ... + 1*1^3) = O(n^4 + (n-1)^4 + ... + 1^4) = O(n^4).
+// O(n^4) bounds any other operation complexity that can be in the code.
+
+
 using namespace std;
 
 int dijkstra(const vector<vector<int>>& graph, int source, int target, int n) {
