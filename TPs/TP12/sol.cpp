@@ -54,9 +54,6 @@ int main() {
         for (int i = 0; i < n; i++) {
             cin >> tower_order[i];
         }
-
-        int test = dijkstra(power_matrix, 0, 2, n);
-        cout << test << endl;
     }
 
     return 0;
