@@ -7,7 +7,7 @@
 // 2. Iterate over n towers and run dijkstra for all pairs of towers (note that while iterating we are removing towers from graph).
 // 3. Sum all costs.
 // Total complexity: O(n*n^2 + (n-1)(n-1)^2 + ... + 1*1^2) = O(n^3 + (n-1)^3 + ... + 1^3)
-// Our complexity aproaches more to O(n^4) than O(n^3)
+// Our complexity aproaches more to O(n^4) than O(n^3) 
 
 using namespace std;
 
