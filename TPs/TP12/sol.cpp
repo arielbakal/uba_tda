@@ -4,6 +4,11 @@
 
 using namespace std;
 
+// TODO: 
+// 1. explain floyd warshall
+// 2. explain increasing floyd warshall
+// 3. add new notes
+
 const int INF = INT_MAX;
 
 int increasing_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_order, int n) {
