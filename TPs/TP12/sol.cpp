@@ -23,9 +23,9 @@ long long inverse_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_o
         }
 
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+            for (int j = i+1; j < n; j++) {
                 if (i != j && destroyed[i] && destroyed[j]) {
-                    total_cost += graph[i][j];
+                    total_cost += graph[i][j] + graph[j][i];
                 }
             }
         }
