@@ -10,6 +10,8 @@ using namespace std;
 
 // Implement Floyd where k runs in reverse order and sum destroyed towers costs.
 
+// NOTES: handle ij where i=j cases
+
 const int INF = INT_MAX;
 
 int inverse_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_order, int n) {
