@@ -1,31 +1,34 @@
 #include <iostream>
 #include <vector>
-#include <climits> 
 using namespace std;
 
-// We want to ensure our destroyed towers dont infer on calculating remaining towers distances,
+// We want to ensure our destroyed towers dont interfere on calculating remaining towers distances,
 // thats bc we need to iterate in reverse order.
 // Then we need to sum only destroyed towers distances to ensure that the paths already calculated by floyd,
 // dont include any towers that will be destroyed on future iterations.
 
 // Implement Floyd where k runs in reverse order and sum destroyed towers costs.
 
-const int INF = INT_MAX;
-
-int inverse_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_order, int n) {
-    int total_cost = 0;
+long long inverse_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_order, int n) {
+    long long total_cost = 0;
     vector<bool> destroyed(n, false);
 
-    for (int k=n-1; k>=0; k--) { // destroy towers in reverse order
+    for (int k = n - 1; k >= 0; k--) { // destroy towers in reverse order
         int tower = tower_order[k];
         destroyed[tower] = true;
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<n; j++) {
-                graph[i][j] = min(graph[i][j], graph[i][tower] + graph[tower][j]); // update matrix
-                if (destroyed[i] && destroyed[j]) total_cost += graph[i][j]; // sum destroyed towers distances
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i!=j) graph[i][j] = min(graph[i][j], graph[i][tower] + graph[tower][j]); // update matrix
             }
         }
 
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && destroyed[i] && destroyed[j]) {
+                    total_cost += graph[i][j];
+                }
+            }
+        }
     }
     return total_cost;
 }
@@ -50,7 +53,7 @@ int main() {
             cin >> tower_order[i];
         }
 
-        int result = inverse_floyd_warshall(power_matrix, tower_order, n);
+        long long result = inverse_floyd_warshall(power_matrix, tower_order, n);
 
         cout << result << endl;
     }
