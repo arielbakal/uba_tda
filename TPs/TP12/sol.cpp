@@ -10,8 +10,6 @@ using namespace std;
 
 // Implement Floyd where k runs in reverse order and sum destroyed towers costs.
 
-// NOTES: handle ij where i=j cases
-
 const int INF = INT_MAX;
 
 int inverse_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_order, int n) {
@@ -23,10 +21,11 @@ int inverse_floyd_warshall(vector<vector<int>>& graph, vector<int> tower_order, 
         destroyed[tower] = true;
         for (int i=0; i<n; i++) {
             for (int j=0; j<n; j++) {
-                graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]); // update matrix
+                graph[i][j] = min(graph[i][j], graph[i][tower] + graph[tower][j]); // update matrix
                 if (destroyed[i] && destroyed[j]) total_cost += graph[i][j]; // sum destroyed towers distances
             }
         }
+
     }
     return total_cost;
 }
