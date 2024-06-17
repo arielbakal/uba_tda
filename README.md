@@ -2,7 +2,7 @@
 
 ### Trabajos Prácticos*
 
-#### Primer Parcial
+#### Parte 1
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
@@ -15,7 +15,7 @@
 | 7: Graphs I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-321)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/solucion.cpp) | C++ |In Process |  |
 | 8: Graphs II |  ([vjudge](https://vjudge.net/problem/UVA-10765)) |  |  | Not Implemented |  |
 
-#### Segundo Parcial
+#### Parte 2
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
@@ -23,5 +23,7 @@
 | 10: Shortest Path I | ([vjudge](https://vjudge.net/problem/UVA-10801)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP10/sol.cpp) | C++ | Approved | 0ms < 3000ms |
 | 11: Shortest Path II | ([vjudge](https://vjudge.net/problem/UVA-515)) |  | C++ | Not Implemented |  |
 | 12: Shortest Path III | ([vjudge](https://vjudge.net/problem/UVA-13211)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP12/sol.cpp) | C++ | Approved | 3650ms < 5000ms |
+| 13: Flow I | ([vjudge](https://vjudge.net/problem/UVA-11045)) |  | C++ | Not Implemented |  |
+| 14: Flow II | ([vjudge](https://vjudge.net/problem/UVA-11380)) |  | C++ | Not Implemented |  |
 
 *Los TPs son problemas publicados en [vjudge](https://vjudge.net/)
