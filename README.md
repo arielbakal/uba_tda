@@ -2,7 +2,7 @@
 
 ### Trabajos Prácticos*
 
-#### Primer Parcial
+#### Parte 1
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
@@ -15,7 +15,7 @@
 | 7: Graphs I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-321)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/solucion.cpp) | C++ |In Process |  |
 | 8: Graphs II |  ([vjudge](https://vjudge.net/problem/UVA-10765)) |  |  | Not Implemented |  |
 
-#### Segundo Parcial
+#### Parte 2
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
