@@ -27,3 +27,7 @@
 | 14: Flow II | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP14/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-11380)) |  | C++ | Not Implemented |  |
 
 *Los TPs son problemas publicados en [vjudge](https://vjudge.net/)
+
+### Bibliografía
+
+- ["Introduction to Algorithms" 4th Edition: Cormen, Leiserson, Rivest, Stein. MIT Press.](https://dl.ebooksworld.ir/books/Introduction.to.Algorithms.4th.Leiserson.Stein.Rivest.Cormen.MIT.Press.9780262046305.EBooksWorld.ir.pdf)
