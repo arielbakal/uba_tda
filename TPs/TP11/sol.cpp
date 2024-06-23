@@ -4,9 +4,8 @@
 #include <vector>
 using namespace std;
 
-// Multiply all "gt" subsequeces values by -1, this will invert the constraint to get all the same ("lt")
-// Sum all subsequences, if i get [0,...,0] then verify 0<sum(k_i) (k_i after invertion) then thats our answer.
-// if i get any (no null) combination like [a1, 0, a2, ....] then a subsequence exists.
+// REDO: this doesnt work, i need to model a map and solve with bellman-ford.
+// maybe k[i] could be the weight from s[i]-1 to s[i] + n[i] and weight k-1 or -k+1 depending of lt/gt because it works with gt/lt and equal!!
 
 
 int main() {
@@ -62,5 +61,5 @@ int main() {
         cout << endl;
 
     }
-    return 0;
+    return 0; 
 }
