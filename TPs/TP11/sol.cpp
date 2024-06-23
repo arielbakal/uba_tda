@@ -8,6 +8,10 @@ using namespace std;
 // 2. Model constraint graph
 // 3. Implement Bellman-Ford, if ends: then sequence exists, else: found a negative-weight cycle then sequence DONT exists 
 
+// Multiply all "gt" subsequeces values by -1, this will invert the constraint to get all the same ("lt")
+// Sum all subsequences, if i get [0,...,0] then verify 0<sum(k_i) (k_i after invertion) then thats our answer. 
+
+
 int main() {
     int N, M;
     vector<int> s, n, o, k; // gt = 1, lt = 0
