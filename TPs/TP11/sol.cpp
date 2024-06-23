@@ -2,8 +2,11 @@
 #include <string>
 #include <sstream>
 #include <vector>
-
 using namespace std;
+
+// 1. Convert subsequences sum contraints system to difference constraints system
+// 2. Model constraint graph
+// 3. Implement Bellman-Ford, if ends: then sequence exists, else: found a negative-weight cycle then sequence DONT exists 
 
 int main() {
     int N, M;
