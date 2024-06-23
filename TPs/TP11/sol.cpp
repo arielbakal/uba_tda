@@ -4,12 +4,9 @@
 #include <vector>
 using namespace std;
 
-// 1. Convert subsequences sum contraints system to difference constraints system
-// 2. Model constraint graph
-// 3. Implement Bellman-Ford, if ends: then sequence exists, else: found a negative-weight cycle then sequence DONT exists 
-
 // Multiply all "gt" subsequeces values by -1, this will invert the constraint to get all the same ("lt")
-// Sum all subsequences, if i get [0,...,0] then verify 0<sum(k_i) (k_i after invertion) then thats our answer. 
+// Sum all subsequences, if i get [0,...,0] then verify 0<sum(k_i) (k_i after invertion) then thats our answer.
+// if i get any (no null) combination like [a1, 0, a2, ....] then a subsequence exists.
 
 
 int main() {
@@ -31,6 +28,36 @@ int main() {
             iss >> s[i] >> n[i] >> op >> k[i];
             if (op == "gt") o[i] = 1; else o[i] = 0;
         }
+
+        vector<int> subseq_list(N, 0);
+
+        for (int i=0; i<M; i++) {
+            vector<int> subseq_list_temp(N);
+            for (int j=s[i]; j<s[i]+n[i]; j++) {
+                if (o[i] == 1) {
+                    subseq_list[i] = subseq_list[i] - j;
+                } else {
+                    subseq_list[i] = subseq_list[i] + j;
+                }
+            }
+        }
+
+        bool result = false;
+
+        for (int i=0; i<N; i++) {
+            if (subseq_list[i] != 0) {
+                result = true;
+                break;
+            }
+        }
+        
+        if (result) {
+            cout << "lamentable kingdom";
+        } else {
+            cout << "successful conspiracy";
+        }
+        cout << endl;
+
     }
     return 0;
 }
