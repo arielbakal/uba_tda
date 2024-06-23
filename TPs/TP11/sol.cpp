@@ -30,6 +30,7 @@ int main() {
         }
 
         vector<int> subseq_list(N, 0);
+        int constraint_sum = 0;
 
         for (int i=0; i<M; i++) {
             vector<int> subseq_list_temp(N);
@@ -40,10 +41,12 @@ int main() {
                     subseq_list[i] = subseq_list[i] + j;
                 }
             }
+            if (o[i] == 1) constraint_sum -= k[i]; else constraint_sum += k[i];
         }
 
         bool result = false;
 
+        
         for (int i=0; i<N; i++) {
             if (subseq_list[i] != 0) {
                 result = true;
@@ -54,7 +57,7 @@ int main() {
         if (result) {
             cout << "lamentable kingdom";
         } else {
-            cout << "successful conspiracy";
+            if (0<constraint_sum) cout << "lamentable kingdom"; else cout << "successful conspiracy";
         }
         cout << endl;
 
