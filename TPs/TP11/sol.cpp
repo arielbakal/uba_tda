@@ -33,15 +33,15 @@ int main() {
         int constraint_sum = 0;
 
         for (int i=0; i<M; i++) {
-            vector<int> subseq_list_temp(N);
+            if (o[i] == 1) constraint_sum -= k[i]; else constraint_sum += k[i];
+            
             for (int j=s[i]; j<s[i]+n[i]; j++) {
                 if (o[i] == 1) {
-                    subseq_list[i] = subseq_list[i] - j;
+                    subseq_list[j] = subseq_list[j] - j;
                 } else {
-                    subseq_list[i] = subseq_list[i] + j;
+                    subseq_list[j] = subseq_list[j] + j;
                 }
             }
-            if (o[i] == 1) constraint_sum -= k[i]; else constraint_sum += k[i];
         }
 
         bool result = false;
