@@ -1,65 +1,70 @@
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-using namespace std;
+    #include <iostream>
+    #include <string>
+    #include <sstream>
+    #include <vector>
+    #include <limits>
+    using namespace std;
 
-// REDO: this doesnt work, i need to model a map and solve with bellman-ford.
-// maybe k[i] could be the weight from s[i]-1 to s[i] + n[i] and weight k-1 or -k+1 depending of lt/gt because it works with gt/lt and equal!!
+    // We have M partial sums constraints of the solution, where each b_i = d(v_0, v_i) is equal to the cumulative sum up to i-th var 
+    // then each term a_i = b_i - b_i-1 = d(v_0, v_i) - d(v_0, v_i-1)
+    // This cancel out almost all the terms of the partial sum getting d(v_0, v_si+ni) - d(v_0, v_si-1) <= k_i -1
+    // which can be represented in a graph as v_si-1 -> v_si+ni costs k_i-1
+    // OBS! handle properly a_0 and for "gt" operator invert the constraint by multiplying by -1
 
+    struct edge {int from, to, weight;};
+    int INF = numeric_limits<int>::max();
 
-int main() {
-    int N, M;
-    vector<int> s, n, o, k; // gt = 1, lt = 0
-    string line;
-    
-    while (cin >> N) {
-        if (N == 0) break;
-        cin >> M;
-        
-        cin.ignore();
-        
-        s.resize(M); n.resize(M); o.resize(M); k.resize(M); 
-        
-        for (int i=0; i<M; i++) {
-            getline(cin, line); istringstream iss(line);
-            string op;
-            iss >> s[i] >> n[i] >> op >> k[i];
-            if (op == "gt") o[i] = 1; else o[i] = 0;
-        }
+    bool has_solution(vector<edge>& edges, int N) { // bellman-ford modified to only return if there's any negative weight cycle
 
-        vector<int> subseq_list(N, 0);
-        int constraint_sum = 0;
+        bool res = true;
 
-        for (int i=0; i<M; i++) {
-            if (o[i] == 1) constraint_sum -= k[i]; else constraint_sum += k[i];
-            
-            for (int j=s[i]; j<s[i]+n[i]; j++) {
-                if (o[i] == 1) {
-                    subseq_list[j] = subseq_list[j] - j;
-                } else {
-                    subseq_list[j] = subseq_list[j] + j;
-                }
+        vector<long long> dist(N+2, INF);
+        dist[N+1] = 0;
+
+        // update distances
+        for (int i=0; i<N+2; i++) {
+            for (auto edge: edges) {
+                dist[edge.to] = min(dist[edge.to], dist[edge.from] + edge.weight);
             }
         }
 
-        bool result = false;
-
-        
-        for (int i=0; i<N; i++) {
-            if (subseq_list[i] != 0) {
-                result = true;
-                break;
-            }
+        // check for negative weight cycles (dist can still be updated)
+        for (auto edge: edges) {
+            if (dist[edge.to] > dist[edge.from] + edge.weight) return false;
         }
-        
-        if (result) {
-            cout << "lamentable kingdom";
-        } else {
-            if (0<constraint_sum) cout << "lamentable kingdom"; else cout << "successful conspiracy";
-        }
-        cout << endl;
 
+        return res;
     }
-    return 0; 
-}
+
+    int main() {
+        int N, M;
+        int s, n, k; string o;
+        vector<edge> edges;
+        string line;
+        
+        while (cin >> N) {
+            if (N == 0) break;
+            cin >> M;
+            
+            cin.ignore();
+
+            edges.resize(M);
+            
+            for (int i=0; i<M; i++) {
+                getline(cin, line); istringstream iss(line);
+                iss >> s >> n >> o >> k;
+                if (o == "gt") edges[i] ={s+n, s-1, -k-1}; else edges[i] = {s-1, s+n, k-1}; // if "gt" invert equation
+            }
+            for (int i=0; i<=N; i++) {
+                edges.push_back({N+1, i, 0}); // since v_0 is used, we use v_n+1 as our vector connected to each vector with cost 0
+            }
+            // then we got N+2 nodes, i=0..N+1
+            
+            bool result = has_solution(edges, N); // there isnt a negative weight cycle (bellman-ford finds dictances vector)
+            
+            if (result) cout << "lamentable kingdom"; else cout << "successful conspiracy";
+            
+            cout << endl;
+        }
+        return 0; 
+    }
