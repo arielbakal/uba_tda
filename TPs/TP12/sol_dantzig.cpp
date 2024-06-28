@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-#include <algorithm>
 using namespace std;
 
 int INF = numeric_limits<int>::max();
@@ -24,11 +23,6 @@ long long dantzig(vector<vector<int>>& graph, int n) {
         for (int i=0; i<=k; i++) {
             for (int j=0; j<=k; j++) {
                 graph[i][j] = min(graph[i][j], graph[i][k+1] + graph[k+1][j]);
-            }
-        }
-        // sum matrix values
-        for (int i=0; i<=k; i++) {
-            for (int j=0; j<=k; j++) {
                 if (i!=j) total_cost += graph[i][j]; 
             }
         }
