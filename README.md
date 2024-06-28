@@ -22,7 +22,7 @@
 | 9: Minimum Spanning Tree | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-1235)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/sol.cpp) | C++ | Approved | 30ms < 3000ms |
 | 10: Shortest Path I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP10/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-10801)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP10/sol.cpp) | C++ | Approved | 0ms < 3000ms |
 | 11: Shortest Path II | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP11/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-515)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP11/sol.cpp) | C++ | Approved | 140ms < 3000ms |
-| 12: Shortest Path III | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP12/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-13211)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP12/sol.cpp) | C++ | Approved | 3650ms < 5000ms |
+| 12: Shortest Path III | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP12/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-13211)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP12/sol_dantzig.cpp) | C++ | Approved | 1780ms < 5000ms |
 | 13: Flow I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP13/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-11045)) |  | C++ | Not Implemented |  |
 | 14: Flow II | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP14/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-11380)) |  | C++ | Not Implemented |  |
 
