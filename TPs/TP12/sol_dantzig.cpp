@@ -3,7 +3,8 @@
 #include <limits>
 using namespace std;
 
-// notes: dantzig logic impl, but wrong problem impl
+// 1. take the order of destroying, inverse the order and reorder graph to that M_new[i][j] = M[order[i]][order[j]]
+// 2. Normal Dantizg impl
 
 int INF = numeric_limits<int>::max();
 
