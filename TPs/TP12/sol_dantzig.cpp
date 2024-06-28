@@ -1,49 +1,37 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <algorithm>
 using namespace std;
-
-// 1. take the order of destroying, inverse the order and reorder graph to that M_new[i][j] = M[order[i]][order[j]]
-// 2. Normal Dantizg impl
 
 int INF = numeric_limits<int>::max();
 
-long long inverse_dantzig(vector<vector<int>>& graph, vector<int> tower_order, int n) {
+long long dantzig(vector<vector<int>>& graph, int n) {
     long long total_cost = 0;
-    vector<bool> destroyed(n, true);
 
-    for (int l=0; l<n-1; l++) {
-        int k = tower_order[l];
-        for (int i=0; i<k; i++) {
-            if (!destroyed[i]) continue;
+    for (int k=0; k<n-1; k++) {
+        for (int i=0; i<=k; i++) {
             int min_1 = INF;
             int min_2 = INF;
-            for (int j=0; j<k; j++) {
-                if (!destroyed[j]) continue;
-                int min_1_temp = graph[i][j] + graph[j][k+1];
-                int min_2_temp = graph[k+1][j] + graph[j][i];
-                if (min_1_temp < min_1) min_1 = min_1_temp;
-                if (min_2_temp < min_2) min_2 = min_2_temp;
+            for (int j=0; j<=k; j++) {
+                min_1 = min(min_1, graph[i][j] + graph[j][k+1]);
+                min_2 = min(min_2, graph[k+1][j] + graph[j][i]);
             }
             graph[i][k+1] = min_1;
             graph[k+1][i] = min_2;
+            total_cost += graph[i][k+1] + graph[k+1][i];
         }
-        for (int i=0; i<k; i++) {
-            if (!destroyed[i]) continue;
-            for (int j=0; j<k; j++) {
-                if (!destroyed[j]) continue;
+        for (int i=0; i<=k; i++) {
+            for (int j=0; j<=k; j++) {
                 graph[i][j] = min(graph[i][j], graph[i][k+1] + graph[k+1][j]);
             }
         }
         // sum matrix values
-        for (int i=0; i<k; i++) {
-            if (!destroyed[i]) continue;
-            for (int j=0; j<k; j++) {
-                if (!destroyed[j]) continue;
-                total_cost += graph[i][j]; 
+        for (int i=0; i<=k; i++) {
+            for (int j=0; j<=k; j++) {
+                if (i!=j) total_cost += graph[i][j]; 
             }
         }
-        destroyed[k] = false;
     }
 
     return total_cost;
@@ -69,7 +57,21 @@ int main() {
             cin >> tower_order[i];
         }
 
-        long long result = inverse_dantzig(power_matrix, tower_order, n);
+        vector<vector<int>> modified_power_matrix(n, vector<int>(n));
+
+        // We reverse the order of tower_order to prevent destroyed towers to infer in distances in further calculations.
+        // Then modify the matrix order to tw_order[n-1]->0, tw_order[n-2]->1, ... ,tw_order[0]->n-1 to just do trivial dantzig. 
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                modified_power_matrix[i][j] = power_matrix[tower_order[n-1-i]][tower_order[n-1-j]];
+            }
+        }
+        // Dantzig invariant ensures that in each iteration we add a node and extend all distances. Since we have reversed order
+        // we'll calculate dists from "last tower to destroy" to its self = 0, then
+        // min distances from "last tower to destroy" to "second to last tower to destroy" 
+        // (which represents calculating dist to remaining towers) and so on.
+
+        long long result = dantzig(modified_power_matrix, n);
 
         cout << result << endl;
     }
