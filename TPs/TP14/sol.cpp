@@ -67,9 +67,9 @@ int edmonds_karp(vector<vector<int>>& graph, int s, int t, int graph_size) {
     return max_flow;
 }
 
-vector<pair<char,int>> get_neighbors(vector<vector<pair<char, int>>> char_graph, int i, int j, int X, int Y) {
+vector<pair<int, int>> get_neighbors(vector<vector<pair<char, int>>> char_graph, int i, int j, int X, int Y) {
     vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    vector<pair<char, int>> neighbors;
+    vector<pair<int, int>> neighbors;
 
     for (const auto& dir : directions) {
         int ni = i + dir.first;
@@ -78,7 +78,7 @@ vector<pair<char,int>> get_neighbors(vector<vector<pair<char, int>>> char_graph,
         // Check if the neighbor is within grid bounds
         if (ni >= 0 && ni < X && nj >= 0 && nj < Y) {
             if (char_graph[ni][nj].first == '~') continue;
-            neighbors.push_back(char_graph[ni][nj]);
+            neighbors.push_back({ni, nj});
         }
     }
     return neighbors;
@@ -88,66 +88,53 @@ int main() {
     int X, Y, P; 
     while(cin >> X >> Y >> P) {
         vector<vector<pair<char, int>>> char_graph(X, vector<pair<char, int>>(Y));
-        int graph_size = (X*Y)+2;
+        int graph_size = (X * Y) + 2;
         vector<vector<int>> flow_graph(graph_size, vector<int>(graph_size, 0));
         // graph: source -> 0 | chars -> 1 to X*Y | sink -> (X*Y)+1
+        
+        int total_P = 0;
 
         char character;
-        int node_num = 0;
-        for (int i=0; i<X; i++) {
-            for (int j=0; j<Y; j++) {
-                node_num += 1;
+        int node_num = 1; // start from 1 because 0 is the source
+        for (int i = 0; i < X; i++) {
+            for (int j = 0; j < Y; j++) {
                 cin >> character;
-                char_graph[i][j] = {character, node_num};
+                if (character == '#') total_P += P;
+                char_graph[i][j] = {character, node_num++};
             }
         }
 
-        int sink_node = (X*Y)+1;
+        int sink_node = (X * Y) + 1;
 
-        pair<char, int> char_pair;
-        vector<pair<char, int>> neighbors;
-        for (int i=1; i<=X; i++) {
-            for (int j=1; j<=Y; j++) {
-                char_pair = char_graph[i-1][j-1]; // {char, node_num}
+        for (int i = 0; i < X; i++) {
+            for (int j = 0; j < Y; j++) {
+                auto [char_type, node_num] = char_graph[i][j];
+                if (char_type == '~') continue; // skip water cells
 
-                if (char_pair.first == '~') continue; // got water
-
-                // from source move to * with capacity 1
-                // from * . @ move both ways with capacity 1. if neighbor is # move with capacity P (one-way)
-                // from # move to sink with capacity P
-                if (char_pair.first == '#') {
-                    flow_graph[char_pair.second][sink_node] = P;
-                    continue;
-                } 
-                neighbors = get_neighbors(char_graph, i-1, j-1, X, Y);
-                if (char_pair.first == '@') {
-                    flow_graph[0][char_pair.second] = 1;
-                    for (auto neighbor : neighbors) {
-                        if (neighbor.second == '#') {
-                            flow_graph[char_pair.second][neighbor.second] = P;
-                        } else {
-                            flow_graph[char_pair.second][neighbor.second] = P;
-                            flow_graph[neighbor.second][char_pair.second] = P;
-                        }
-                    }
-                    continue;
+                // source to all * with capacity 1
+                if (char_type == '*') {
+                    flow_graph[0][node_num] = 1;
                 }
-                if (char_pair.first == '*') {
-                    flow_graph[0][char_pair.second] = 1;
+
+                // all # to sink with capacity P 
+                if (char_type == '#') {
+                    flow_graph[node_num][sink_node] = P;
                 }
-                for (auto neighbor : neighbors) {
-                    if (neighbor.second == '#') {
-                        flow_graph[char_pair.second][neighbor.second] = P;
+
+                // get neighbors and connect nodes accordingly
+                for (auto [ni, nj] : get_neighbors(char_graph, i, j, X, Y)) {
+                    auto [neighbor_char, neighbor_num] = char_graph[ni][nj];
+
+                    if (char_type == '@' || char_type == '#') {
+                        flow_graph[node_num][neighbor_num] = INT_MAX;
                     } else {
-                        flow_graph[char_pair.second][neighbor.second] = 1;
-                        flow_graph[neighbor.second][char_pair.second] = 1;
+                        flow_graph[node_num][neighbor_num] = 1;
                     }
                 }
             }
         }
-        char blank; cin >> blank;
 
-        int result = edmonds_karp(flow_graph, 0, (X*Y)+1, graph_size);
+        int result = edmonds_karp(flow_graph, 0, sink_node, graph_size);
         cout << result << endl;
     }
     return 0;
