@@ -107,8 +107,7 @@ int main() {
 
         int result = edmonds_karp(graph, 0, sink_node, M);
 
-        if (result == M) cout << "YES"; 
-        else cout << "NO";
+        if (result == M) cout << "YES"; else cout << "NO";
         cout << endl;
     }
     return 0;
