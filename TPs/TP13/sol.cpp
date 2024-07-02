@@ -5,9 +5,9 @@
 #include <vector>
 using namespace std;
 
-bool bfs(vector<vector<pair<int, int>>> residual_graph, int s, int t, int parent[], int M) {
+bool bfs(vector<vector<int>>& residual_graph, int s, int t, vector<int>& parent, int M) {
 
-    bool visited(M+9, false); 
+    vector<bool> visited(M+9, false); 
     queue<int> q;
 
     // start from source
@@ -47,7 +47,7 @@ int edmonds_karp(vector<vector<int>> graph, int s, int t, int M) {
     int max_flow = 0;
 
     // augment flow while path source to sink exists
-    while (bfs(residual_graph, s, t, parent)) {
+    while (bfs(residual_graph, s, t, parent, M)) {
         // find min residual capacity edges along the path filled by BFS 
         // (find max flow through the path found)
         int path_flow = INT_MAX;
@@ -85,7 +85,7 @@ int main() {
     for (int t=0; t<T; t++) {
 
         int N, M; cin >> N >> M;
-        vector<vector<int> graph(M+9, vector<int>(M+9, 0)); // space complexity O(n^2) but M<=30
+        vector<vector<int>> graph(M+9, vector<int>(M+9, 0)); // space complexity O(n^2) but M<=30
         // graph: 
         // source->0, 
         // XXL -> 1, XL -> 2, ... , XS -> 6
