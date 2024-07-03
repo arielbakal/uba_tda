@@ -88,21 +88,23 @@ int main() {
     int X, Y, P; 
     while(cin >> X >> Y >> P) {
         vector<vector<pair<char, int>>> char_graph(X, vector<pair<char, int>>(Y));
-        int graph_size = (X * Y) + 2;
+        int graph_size = (X * Y * 2) + 2;
         vector<vector<int>> flow_graph(graph_size, vector<int>(graph_size, 0));
-        // graph: source -> 0 | chars -> 1 to X*Y | sink -> (X*Y)+1
+        // graph: source -> 0 | chars -> 1 to X*Y | sink -> (X*Y*2)+1
+        // @ nodes will be divided in two states in and out to ensure only 1 person can pass through icebergs at time
+        // out @ nodes -> (X*Y + 1, ... , X*Y + X*Y)
 
         char character;
         int node_num = 1; // start from 1 because 0 is the source
         for (int i = 0; i < X; i++) {
             for (int j = 0; j < Y; j++) {
                 cin >> character;
-                if (character == '#') total_P += P;
                 char_graph[i][j] = {character, node_num++};
             }
         }
 
-        int sink_node = (X * Y) + 1;
+        int sink_node = (X * Y * 2) + 1;
+        int out_node_offset = X * Y; // starting point for out nodes of icebergs
 
         for (int i = 0; i < X; i++) {
             for (int j = 0; j < Y; j++) {
@@ -122,22 +124,25 @@ int main() {
                 // get neighbors and connect nodes accordingly
                 for (auto [ni, nj] : get_neighbors(char_graph, i, j, X, Y)) {
                     auto [neighbor_char, neighbor_num] = char_graph[ni][nj];
-
-                    if (char_type == '@' || char_type == '#') {
-                        flow_graph[node_num][neighbor_num] = INT_MAX;
+                    
+                    if (char_type == '@') {
+                        int out_node_num = node_num + out_node_offset;
+                        flow_graph[node_num][out_node_num] = 1; // internal edge with capacity 1
+                        if (neighbor_char != '~') {
+                            flow_graph[out_node_num][neighbor_num] = INT_MAX; // connect out node to neighbors with capacity INT_MAX
+                        }
+                    } else if (neighbor_char == '@') {
+                        int neighbor_out_node = neighbor_num + out_node_offset;
+                        flow_graph[node_num][neighbor_num] = 1; // connect node to neighbor's in node
+                        flow_graph[neighbor_num][neighbor_out_node] = 1; // neighbor's in to out node
+                    } else if (char_type == '#') {
+                        flow_graph[node_num][neighbor_num] = INT_MAX; // connect from # to neighbors with capacity INT_MAX
                     } else {
                         flow_graph[node_num][neighbor_num] = 1;
                     }
                 }
             }
         }
-
-        // for (int i = 0; i < graph_size; i++) {
-        //     for (int j = 0; j < graph_size; j++) {
-        //         cout << graph_size[i][j] << " ";
-        //     }
-        //     cout << endl;
-        // }         
 
         int result = edmonds_karp(flow_graph, 0, sink_node, graph_size);
         cout << result << endl;
