@@ -1,8 +1,8 @@
-## Técnicas de Diseño de Algoritmos 1C2024 (ex Algo 3)
+## Técnicas de Diseño de Algoritmos 1C/2C 2024 (ex Algo 3)
 
 ### Trabajos Prácticos*
 
-#### Parte 1
+#### 1° Cuatrimestre
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
@@ -14,11 +14,6 @@
 | 6: Greedy II | ([vjudge](https://vjudge.net/problem/CodeForces-1215C)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP6/solucion.cpp) | C++ | Accepted | 186ms < 2000ms |
 | 7: Graphs I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-321)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP7/solucion.cpp) | C++ | In Process |  |
 | 8: Graphs II | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP8/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-10765)) |  |  | Not Implemented |  |
-
-#### Parte 2
-
-| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
-|-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
 | 9: Minimum Spanning Tree | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-1235)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP9/sol.cpp) | C++ | Accepted | 30ms < 3000ms |
 | 10: Shortest Path I | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP10/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-10801)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP10/sol.cpp) | C++ | Accepted | 0ms < 3000ms |
 | 11: Shortest Path II | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP11/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-515)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP11/sol.cpp) | C++ | Accepted | 140ms < 3000ms |
