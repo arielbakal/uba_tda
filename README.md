@@ -25,4 +25,6 @@
 
 ### Bibliografía
 
+- ["Algorithm Design": Kleinberg J., Tardos, E., Addison Wesley, Pearson, 2006](https://edisciplinas.usp.br/pluginfile.php/7933913/course/section/6549987/Algorithm%20Design.pdf)
+- ["Competitive Programmer's Handbook": Antti Laaksonen](https://cses.fi/book/book.pdf)
 - ["Introduction to Algorithms" 4th Edition: Cormen, Leiserson, Rivest, Stein. MIT Press.](https://dl.ebooksworld.ir/books/Introduction.to.Algorithms.4th.Leiserson.Stein.Rivest.Cormen.MIT.Press.9780262046305.EBooksWorld.ir.pdf)
