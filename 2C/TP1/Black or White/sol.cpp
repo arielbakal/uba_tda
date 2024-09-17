@@ -47,10 +47,11 @@ int main()
         res_incr = bt_incr(0, INT_MIN, X);
         res_decr = bt_decr(0, INT_MAX, X);
         
-        int res;
-        res = N - res_incr - res_decr;
-        
-        cout << res << endl;
+        if ((N - res_incr - res_decr) <= 0) {
+            cout << 0 << endl;
+        } else {
+            cout << N - res_incr - res_decr << endl;
+        }
     }
     
     return 0;
