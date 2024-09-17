@@ -1,31 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <climits>
 using namespace std;
 
 // STATUS: Backtracking algo implemented
-// TODO: test backtracking algorithm; impl both asc and desc algorithm and test it; do recursive topdown;
+// TODO: impl both asc and desc algorithm and test it; do recursive topdown;
 
-int bt(int i, vector<int> A, int l, const vector<int> X, const int N) {
+int bt_incr(int i, int last_elem, const vector<int>& X) {
     
-    if (i==N) {
-        return l;
+    if (i==X.size()) {
+        return 0;
     }
-    if (A.size() == 0) {
-        vector<int> added_A;
-        added_A = A;
-        added_A.push_back(X[i]); 
-        return bt(i+1, added_A, l-1, X, N);
-    }
-    if (A[A.size()-1] >= X[i]){
-        vector<int> empty_A;
-        empty_A.push_back(X[i]);
-        return min(bt(i+1, A, l, X, N), bt(i+1, empty_A, N-1, X, N));
+    if (last_elem >= X[i]){ // Si NO es increasing, continuo
+        return bt_incr(i+1, last_elem, X);
     }   
-    vector<int> added_A;
-    added_A = A;
-    added_A.push_back(X[i]);
-    return min(bt(i+1, added_A, l-1, X, N), bt(i+1, A, l, X, N));
+    // Si es increasing, busco el maximo entre actualizar last_elem y continuar explorando
+    return max(bt_incr(i+1, X[i], X) + 1, bt_incr(i+1, last_elem, X)); 
 }
+
 
 int main()
 {
@@ -37,12 +30,11 @@ int main()
             cin >> X[i];
         }
         
-        vector<int> A;
-        int res;
+        int res_incr;
         
-        res = bt(0, A, N, X, N);
+        res_incr = bt_incr(0, INT_MIN, X);
         
-        cout << res << endl;
+        cout << res_incr << endl;
     }
     
     return 0;
