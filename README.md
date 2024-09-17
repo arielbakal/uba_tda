@@ -2,6 +2,12 @@
 
 ### Trabajos Prácticos*
 
+#### 2° Cuatrimestre
+
+| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
+|-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
+| 1: Black or White | [SPOJ](https://www.spoj.com/TDA242C1/problems/BORW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Black%20or%20White/sol.cpp) | C++ | In Process |  |
+
 #### 1° Cuatrimestre
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
