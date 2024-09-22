@@ -4,31 +4,41 @@
 #include <climits>
 using namespace std;
 
-// STATUS: Backtracking algo implemented
-// TODO: do recursive topdown;
+// STATUS: topdown impl
+// TODO: 
 
-int bt_incr(int i, int last_elem, const vector<int>& X) {
+int bt_incr(int i, int last_elem, const vector<int>& X, vector<vector<int>>& M_incr) {
     
     if (i==X.size()) {
         return 0;
     }
-    if (last_elem >= X[i]){ // Si NO es increasing, continuo
-        return bt_incr(i+1, last_elem, X);
-    }   
-    // Si es increasing, busco el maximo entre actualizar last_elem y continuar explorando
-    return max(bt_incr(i+1, X[i], X) + 1, bt_incr(i+1, last_elem, X)); 
+
+    if (M_incr[i][last_elem] == -1) {
+        if (last_elem >= X[i]){ // Si NO es increasing, continuo
+            M_incr[i][last_elem] = bt_incr(i+1, last_elem, X, M_incr);
+
+        } else { // Si es increasing, busco el maximo entre actualizar last_elem y continuar explorando
+            M_incr[i][last_elem] = max(bt_incr(i+1, X[i], X, M_incr) + 1, bt_incr(i+1, last_elem, X, M_incr));
+        }
+    }
+    return M_incr[i][last_elem];
 }
 
-int bt_decr(int i, int last_elem, const vector<int>& X) {
-    
+int bt_decr(int i, int last_elem, const vector<int>& X, vector<vector<int>>& M_decr) {
+
     if (i==X.size()) {
         return 0;
     }
-    if (last_elem <= X[i]){ // Si NO es increasing, continuo
-        return bt_decr(i+1, last_elem, X);
-    }   
-    // Si es increasing, busco el maximo entre actualizar last_elem y continuar explorando
-    return max(bt_decr(i+1, X[i], X) + 1, bt_decr(i+1, last_elem, X)); 
+
+    if (M_decr[i][last_elem] == -1) {
+        if (last_elem <= X[i]){ // Si NO es decreasing, continuo
+            M_decr[i][last_elem] = bt_decr(i+1, last_elem, X, M_decr);
+
+        } else { // Si es decreasing, busco el maximo entre actualizar last_elem y continuar explorando
+            M_decr[i][last_elem] = max(bt_decr(i+1, X[i], X, M_decr) + 1, bt_decr(i+1, last_elem, X, M_decr));
+        }
+    }
+    return M_decr[i][last_elem];
 }
 
 int main()
@@ -43,9 +53,13 @@ int main()
         
         int res_incr;
         int res_decr;
+        int max_elem; max_elem = *max_element(X.begin(), X.end());
+
+        vector<vector<int>> M_incr(N + 1, vector<int>(max_elem + 2, -1));
+        vector<vector<int>> M_decr(N + 1, vector<int>(max_elem + 2, -1));
         
-        res_incr = bt_incr(0, INT_MIN, X);
-        res_decr = bt_decr(0, INT_MAX, X);
+        res_incr = bt_incr(0, 0, X, M_incr);
+        res_decr = bt_decr(0, max_elem + 1, X, M_decr);
         
         if ((N - res_incr - res_decr) <= 0) {
             cout << 0 << endl;
