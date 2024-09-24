@@ -5,6 +5,9 @@
 
 using namespace std;
 
+// STATUS: funcion BT impl
+// TODO: lo que se busca es maximizar la distancia TOTAL entre TODAS las vacas y retornar la min dist entre esas distancias que maximizan el total.
+
 int min_dist_stall(int i, int last_stall_pos, int actual_min_dist, int C, const int N, const vector<int>& stall_pos) {
     
     if (i==N && C>0) {
