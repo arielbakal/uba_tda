@@ -4,6 +4,10 @@
 
 using namespace std;
 
+// Propongo ir seleccionando el evento que termina antes y que comience despues del anterior
+// Ordeno en base a los tiempos de finalizacion con MergeSort, asi simplemente itero sobre los ordenados
+// y verifico si es posible la combinacion.
+
 vector<pair<int, int>> merge(vector<pair<int, int>>& ladoIzq, vector<pair<int, int>>& ladoDer) {
     vector<pair<int, int>> res;
     int i = 0, j = 0;
