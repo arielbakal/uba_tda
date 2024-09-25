@@ -1,34 +1,42 @@
 #include <vector>
 #include <limits.h>
 #include <cstdlib>
+#include <utility>
 #include <iostream>
 
 using namespace std;
 
 // STATUS: funcion BT impl
-// TODO: lo que se busca es maximizar la distancia TOTAL entre TODAS las vacas y retornar la min dist entre esas distancias que maximizan el total.
+// TODO: 
 
-int min_dist_stall(int i, int last_stall_pos, int actual_min_dist, int C, const int N, const vector<int>& stall_pos) {
+pair<int, int> min_dist_stall(int i, int last_stall_pos, int actual_tot_dist, int actual_min_dist, int C, const int N, const vector<int>& stall_pos) {
     
     if (i==N && C>0) {
-        return INT_MAX;
+        return make_pair(0, INT_MAX);
     } 
     if (i==N || C==0) {
-        return actual_min_dist;
+        return make_pair(actual_tot_dist, actual_min_dist);
     }
 
-    int dont_assing_cow = min_dist_stall(i+1, last_stall_pos, actual_min_dist, C, N, stall_pos);
+    pair<int, int> dont_assing_cow = min_dist_stall(i+1, last_stall_pos, actual_tot_dist, actual_min_dist, C, N, stall_pos);
     
     if (last_stall_pos == -1) {
         actual_min_dist = INT_MAX;
     } else {
-        int temp_min_dist = abs(stall_pos[last_stall_pos] - stall_pos[i]);
-        actual_min_dist = min(actual_min_dist, temp_min_dist);
+        int last_stall_dist = abs(stall_pos[i] - stall_pos[last_stall_pos]);
+        
+        actual_tot_dist = actual_tot_dist + last_stall_dist;
+        
+        actual_min_dist = min(actual_min_dist, last_stall_dist);
     }
     
-    int assing_cow = min_dist_stall(i+1, i, actual_min_dist, C-1, N, stall_pos);
+    pair<int, int> assing_cow = min_dist_stall(i+1, i, actual_tot_dist, actual_min_dist, C-1, N, stall_pos);
     
-    return min(dont_assing_cow, assing_cow);
+    if (dont_assing_cow.first > assing_cow.first) {
+        return dont_assing_cow;
+    } else {
+        return assing_cow;
+    }
 }
 
 int main()
@@ -42,9 +50,9 @@ int main()
             cin >> stall_pos[i];            
         }
         
-        int res = min_dist_stall(0, -1, INT_MAX, C, N, stall_pos);
+        pair<int, int> res = min_dist_stall(0, -1, 0, INT_MAX, C, N, stall_pos);
         
-        cout << res << endl;
+        cout << res.second << endl;
     }
     return 0;
 }
