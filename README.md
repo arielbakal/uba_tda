@@ -7,6 +7,7 @@
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
 | 1: Busyman | [SPOJ](https://www.spoj.com/TDA242C1/problems/BUSYMAN/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Busyman/sol.cpp) | C++ | Accepted | 0.33ms |
+| 1: Aggressive Cows | [SPOJ](https://www.spoj.com/TDA242C1/problems/AGGRCOW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Cows/sol.cpp) | C++ | In Process |  |
 | 1: Black or White | [SPOJ](https://www.spoj.com/TDA242C1/problems/BORW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Black%20or%20White/sol.cpp) | C++ | In Process |  |
 
 
