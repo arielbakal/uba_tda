@@ -7,7 +7,7 @@
 using namespace std;
 
 // STATUS: funcion BT impl
-// TODO: 
+// TODO: Hacer divide and conquer chequeando la minima distancia a mid
 
 pair<int, int> min_dist_stall(int i, int last_stall_pos, int actual_tot_dist, int actual_min_dist, int C, const int N, const vector<int>& stall_pos) {
     
