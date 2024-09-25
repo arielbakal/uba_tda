@@ -3,7 +3,6 @@
 ### Trabajos Prácticos*
 
 #### 2° Cuatrimestre
-https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Busyman/sol.cpp
 
 | TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
