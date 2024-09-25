@@ -1,58 +1,109 @@
 #include <vector>
-#include <limits.h>
-#include <cstdlib>
-#include <utility>
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
 
-// STATUS: funcion BT impl
-// TODO: Hacer divide and conquer chequeando la minima distancia a mid
-
-pair<int, int> min_dist_stall(int i, int last_stall_pos, int actual_tot_dist, int actual_min_dist, int C, const int N, const vector<int>& stall_pos) {
+int can_cows_fit(int actual_dist, int C, const vector<int>& stall_pos, const int N) {
     
-    if (i==N && C>0) {
-        return make_pair(0, INT_MAX);
-    } 
-    if (i==N || C==0) {
-        return make_pair(actual_tot_dist, actual_min_dist);
-    }
-
-    pair<int, int> dont_assing_cow = min_dist_stall(i+1, last_stall_pos, actual_tot_dist, actual_min_dist, C, N, stall_pos);
+    int cows_fitted, last_pos;
     
-    if (last_stall_pos == -1) {
-        actual_min_dist = INT_MAX;
-    } else {
-        int last_stall_dist = abs(stall_pos[i] - stall_pos[last_stall_pos]);
-        
-        actual_tot_dist = actual_tot_dist + last_stall_dist;
-        
-        actual_min_dist = min(actual_min_dist, last_stall_dist);
+    for (int i=0; i<N; i++) {
+        if (i==0) {
+            cows_fitted = 1;
+            last_pos = stall_pos[0];
+        }
+        int last_pos_dist = stall_pos[i] - last_pos; 
+        if (last_pos_dist >= actual_dist) {
+            cows_fitted += 1;  
+            last_pos = stall_pos[i];  
+            
+            if (cows_fitted == C) {  
+                return true;
+            }
+        }
     }
     
-    pair<int, int> assing_cow = min_dist_stall(i+1, i, actual_tot_dist, actual_min_dist, C-1, N, stall_pos);
+    return false;
+}
+
+int div_and_conquer_dist(int low, int high, int C, const vector<int>& stall_pos, const int N) {
     
-    if (dont_assing_cow.first > assing_cow.first) {
-        return dont_assing_cow;
+    if (low > high) {
+        return low-1;
+    }
+    
+    int mid = (low + high) / 2;
+    if (can_cows_fit(mid, C, stall_pos, N)) {
+        
+        return div_and_conquer_dist(mid+1, high, C, stall_pos, N);
     } else {
-        return assing_cow;
+        
+        return div_and_conquer_dist(low, mid-1, C, stall_pos, N);
     }
 }
 
-int main()
-{
-    int T; cin >> T;
+vector<int> merge(vector<int>& ladoIzq, vector<int>& ladoDer) {
+    vector<int> res;
+    int i = 0, j = 0;
+
+    while (i < ladoIzq.size() && j < ladoDer.size()) {
+        if (ladoIzq[i] <= ladoDer[j]) {
+            res.push_back(ladoIzq[i]);
+            i++;
+        } else {
+            res.push_back(ladoDer[j]);
+            j++;
+        }
+    }
+
+    while (i < ladoIzq.size()) {
+        res.push_back(ladoIzq[i]);
+        i++;
+    }
+
+    while (j < ladoDer.size()) {
+        res.push_back(ladoDer[j]);
+        j++;
+    }
+
+    return res;
+}
+
+vector<int> mergeSort(vector<int>& arr) {
+    if (arr.size() <= 1) {
+        return arr;
+    }
+
+    int medio = arr.size() / 2;
+    vector<int> izq(arr.begin(), arr.begin() + medio);
+    vector<int> der(arr.begin() + medio, arr.end());
+
+    izq = mergeSort(izq);
+    der = mergeSort(der);
+
+    return merge(izq, der);
+}
+
+int main() {
+    int T;
+    cin >> T;
     for (int t=0; t<T; t++) {
-        int N, C; cin >> N >> C;
+        int N, C;
+        cin >> N >> C;
         vector<int> stall_pos(N);
         
-        for (int i=0; i<N; i++) {
-            cin >> stall_pos[i];            
+        for (int i = 0; i < N; i++) {
+            cin >> stall_pos[i];
         }
         
-        pair<int, int> res = min_dist_stall(0, -1, 0, INT_MAX, C, N, stall_pos);
+        vector<int> sorted_stall_pos = mergeSort(stall_pos);
         
-        cout << res.second << endl;
+        int max_dist = sorted_stall_pos[N-1] - sorted_stall_pos[0];
+        
+        int res = div_and_conquer_dist(1, max_dist, C, sorted_stall_pos, N);
+        
+        cout << res << endl;
     }
     return 0;
 }
