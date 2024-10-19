@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-void graph_coloring_dfs(const vector<vector<int>> graph, int& elems_in_set_A, vector<bool>& visited, vector<bool>& colors, int u) {
+void graph_coloring_dfs(const vector<vector<int>>& graph, int& elems_in_set_A, vector<bool>& visited, vector<bool>& colors, int u) {
 
     visited[u] = true;
 
@@ -19,7 +19,6 @@ int main() {
 
     vector<vector<int>> graph(n);
     vector<bool> visited(n, false);
-    vector<bool> assigned_edges(n, false);
     vector<bool> colors(n, false);
 
     for (int i=0; i<n-1; i++) { // we read n-1 edges
