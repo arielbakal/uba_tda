@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-void graph_coloring_dfs(const vector<vector<int>>& graph, int& elems_in_set_A, vector<bool>& visited, vector<bool>& colors, int u) {
+void graph_coloring_dfs(const vector<vector<int>>& graph, long long& elems_in_set_A, vector<bool>& visited, vector<bool>& colors, int u) {
 
     visited[u] = true;
 
@@ -29,11 +29,11 @@ int main() {
 
     // get colored nodes
     colors[0] = 0; // root node has color 0
-    int elems_in_set_A = 1;
+    long long elems_in_set_A = 1;
     graph_coloring_dfs(graph, elems_in_set_A, visited, colors, 0);
 
     // count edges
-    int res = (elems_in_set_A * (n - elems_in_set_A)) - (n-1);
+    long long res = (elems_in_set_A * (n - elems_in_set_A)) - (n-1);
 
     cout << res << endl;
 
