@@ -11,7 +11,7 @@
 | 1C: Busyman | [SPOJ](https://www.spoj.com/TDA242C1/problems/BUSYMAN/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Busyman/sol.cpp) | C++ | Accepted | 0.33s |
 | 2A: ¿Qué aristas van en un AGM? | [Codeforces](https://codeforces.com/gym/551343/problem/A) | | C++ | Not Implemented |  |
 | 2B: Igna, Martín y la bipartitud | [Codeforces](https://codeforces.com/gym/551343/problem/B) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Inga%2C%20Mart%C3%ADn%20y%20la%20bipartitud/sol.cpp) | C++ | Accepted | 327ms |
-| 2C: Juli y los túneles de Exactas | [Codeforces](https://codeforces.com/gym/551343/problem/C) | | C++ | Not Implemented |  |
+| 2C: Juli y los túneles de Exactas | [Codeforces](https://codeforces.com/gym/551343/problem/C) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Juli%20y%20los%20t%C3%BAneles%20de%20Exactas/sol.cpp) | C++ | Accepted | 358ms |
 
 
 #### 1° Cuatrimestre
