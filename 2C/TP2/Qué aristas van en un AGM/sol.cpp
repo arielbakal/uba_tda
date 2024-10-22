@@ -1,74 +1,82 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <unordered_map>
-
+#include <tuple>
 using namespace std;
 
+class DSU {
+    vector<int> rank, parent;
+public:
+    DSU(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        for (int i = 0; i < n + 1; i++) {
+            parent[i] = i;
+        }
+    }
 
-// TODO: start from zero using the logic of the statement. This will not solve the problem
+    int findSet(int node) {
+        // Si el nodo es su propio padre, entonces es el representante
+        if (node == parent[node]) return node;
+
+        // Hacemos path compression
+        return parent[node] = findSet(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int uRepresentative = findSet(u);
+        int vRepresentative = findSet(v);
+
+        // Si tienen el mismo representante, ya están en el mismo conjunto
+        if (uRepresentative == vRepresentative) return;
+
+        // Unimos los conjuntos según el rank
+        if (rank[uRepresentative] < rank[vRepresentative]) {
+            parent[uRepresentative] = vRepresentative;
+        } else if (rank[uRepresentative] > rank[vRepresentative]) {
+            parent[vRepresentative] = uRepresentative;
+        } else {
+            parent[vRepresentative] = uRepresentative;
+            rank[uRepresentative]++;
+        }
+    }
+};
+
+int kruskal_mst_weight(vector<tuple<int, int, int>>& edges, int n) {
+    long long mst_weight = 0;
+    sort(edges.begin(), edges.end());
+    DSU dsu(n);
+
+    int aristas = 0;
+    for (auto [w, u, v] : edges) {
+        // Si u y v no pertenecen al mismo conjunto,
+        if (dsu.findSet(u) != dsu.findSet(v)) {
+            // los unimos
+            dsu.unionByRank(u, v);
+            mst_weight += w;  
+            aristas++;
+        }
+        if (aristas == n - 1) break;
+    }
+    if (aristas == n - 1) return mst_weight;
+    else return -1;
+}
 
 int main() {
-    int n, m; 
+    int n, m;
     cin >> n >> m;
-    
-    vector<int> weights(m);
-    unordered_map<int, int> count_weights;
-    unordered_map<int, int> edge_in_agm;
-    
-    int count_equal_edges = 0;
+
+    vector<tuple<int, int, int>> edges;
 
     for (int i = 0; i < m; i++) {
         int u, v, w;
         cin >> u >> v >> w;
-        weights[i] = w;
-        count_weights[w]++;
+        edges.push_back({w, u, v});
     }
 
-    vector<int> indices(m);
-    for (int i = 0; i < m; i++) {
-        indices[i] = i;
-    }
-    
-    sort(indices.begin(), indices.end(), [&](int i, int j) {
-        return weights[i] < weights[j];
-    });
-    
-    for (int i = 0; i < m; i++) {
-        int sorted_weight = weights[indices[i]];
-        
-        if (i < n) {
-            if (count_weights[sorted_weight] > 1) {
-                count_equal_edges++;
-                edge_in_agm[sorted_weight] = 3; // AT LEAST ONE
-            } else {
-                edge_in_agm[sorted_weight] = 2; // ANY
-            }
-        } else {
-            edge_in_agm[sorted_weight] = 1; // NONE
-        }
-    }
+    int mst_weight = kruskal_mst_weight(edges, n);
 
-    for (int i = 0; i < m; i++) {
-        int w = weights[i];
-        if (count_equal_edges == m) {
-            cout << "at least one" << endl;
-        } else if (count_equal_edges == n - 1) {
-            if (count_weights[w] > 1) {
-                cout << "any" << endl;
-            } else {
-                cout << "none" << endl;
-            }
-        } else {
-            if (edge_in_agm[w] == 3) {
-                cout << "at least one" << endl;
-            } else if (edge_in_agm[w] == 2) {
-                cout << "any" << endl;
-            } else {
-                cout << "none" << endl;
-            }
-        }
-    }
-    
+    cout << mst_weight << endl;
+
     return 0;
 }
