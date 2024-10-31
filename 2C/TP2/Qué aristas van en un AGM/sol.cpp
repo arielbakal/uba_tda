@@ -2,7 +2,21 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
+#include <unordered_map>
+#include <map>
+#include <string>
 using namespace std;
+
+struct tuple_hash {
+    std::size_t operator()(const std::tuple<int, int, int>& t) const {
+        auto [a, b, c] = t;
+        std::size_t h1 = std::hash<int>{}(a);
+        std::size_t h2 = std::hash<int>{}(b);
+        std::size_t h3 = std::hash<int>{}(c);
+
+        return h1 ^ (h2 << 1) ^ (h3 << 2);
+    }
+};
 
 class DSU {
     vector<int> rank, parent;
@@ -42,7 +56,7 @@ public:
     }
 };
 
-int kruskal_mst_weight(vector<tuple<int, int, int>>& edges, int n) {
+int kruskal_mst_weight(vector<tuple<int, int, int>>& edges, int n, unordered_map<tuple<int, int, int>, int, tuple_hash>& classified_edges) {
     long long mst_weight = 0;
     sort(edges.begin(), edges.end());
     DSU dsu(n);
@@ -54,9 +68,12 @@ int kruskal_mst_weight(vector<tuple<int, int, int>>& edges, int n) {
             // los unimos
             dsu.unionByRank(u, v);
             mst_weight += w;  
+            classified_edges[{w, u, v}] = 2; 
             aristas++;
         }
-        if (aristas == n - 1) break;
+        if (aristas > n - 1) {
+            classified_edges[{w, u, v}] = 0;
+        };
     }
     if (aristas == n - 1) return mst_weight;
     else return -1;
@@ -66,17 +83,29 @@ int main() {
     int n, m;
     cin >> n >> m;
 
+    unordered_map<int, string> classify_names;
+    classify_names[0] = "none";
+    classify_names[1] = "at least one";
+    classify_names[2] = "any";
+    
+    vector<tuple<int, int, int>> unsorted_edges;
     vector<tuple<int, int, int>> edges;
+    unordered_map<tuple<int, int, int>, int, tuple_hash> classified_edges; 
 
     for (int i = 0; i < m; i++) {
         int u, v, w;
         cin >> u >> v >> w;
+        unsorted_edges.push_back({w, u, v});
         edges.push_back({w, u, v});
     }
 
-    int mst_weight = kruskal_mst_weight(edges, n);
+    int mst_weight = kruskal_mst_weight(edges, n, classified_edges);
 
     cout << mst_weight << endl;
+
+    for (auto [w, u, v] : unsorted_edges) {
+        cout << w << ": " << classify_names[classified_edges[{w, u ,v}]] << endl;
+    }
 
     return 0;
 }
