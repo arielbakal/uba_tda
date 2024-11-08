@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <tuple>
 #include <unordered_map>
-#include <map>
 #include <string>
+
 using namespace std;
 
 struct tuple_hash {
@@ -13,7 +13,6 @@ struct tuple_hash {
         std::size_t h1 = std::hash<int>{}(a);
         std::size_t h2 = std::hash<int>{}(b);
         std::size_t h3 = std::hash<int>{}(c);
-
         return h1 ^ (h2 << 1) ^ (h3 << 2);
     }
 };
@@ -30,21 +29,14 @@ public:
     }
 
     int findSet(int node) {
-        // Si el nodo es su propio padre, entonces es el representante
         if (node == parent[node]) return node;
-
-        // Hacemos path compression
         return parent[node] = findSet(parent[node]);
     }
 
     void unionByRank(int u, int v) {
         int uRepresentative = findSet(u);
         int vRepresentative = findSet(v);
-
-        // Si tienen el mismo representante, ya están en el mismo conjunto
         if (uRepresentative == vRepresentative) return;
-
-        // Unimos los conjuntos según el rank
         if (rank[uRepresentative] < rank[vRepresentative]) {
             parent[uRepresentative] = vRepresentative;
         } else if (rank[uRepresentative] > rank[vRepresentative]) {
@@ -56,25 +48,33 @@ public:
     }
 };
 
-int kruskal_mst_weight(vector<tuple<int, int, int>>& edges, int n, unordered_map<tuple<int, int, int>, int, tuple_hash>& classified_edges) {
+int kruskalMST(vector<tuple<int, int, int>>& edges, int n,
+               unordered_map<tuple<int, int, int>, int, tuple_hash>& classified_edges,
+               unordered_map<int, int>& count_weights) {
     long long mst_weight = 0;
     sort(edges.begin(), edges.end());
     DSU dsu(n);
-
     int aristas = 0;
+    vector<vector<int>> agm(n + 1);
+
     for (auto [w, u, v] : edges) {
-        // Si u y v no pertenecen al mismo conjunto,
         if (dsu.findSet(u) != dsu.findSet(v)) {
-            // los unimos
+            // Si hay aristas de peso repetido, pausa y verifica el subgrafo actual
+            // if (count_weights[w] > 1) {
+            // }
             dsu.unionByRank(u, v);
-            mst_weight += w;  
-            classified_edges[{w, u, v}] = 2; 
+            mst_weight += w;
+            agm[u].push_back(v);
+            agm[v].push_back(u);
+            classified_edges[{w, u, v}] = 2;  
             aristas++;
+        } else {
+            classified_edges[{w, u, v}] = 0;  
         }
-        if (aristas > n - 1) {
-            classified_edges[{w, u, v}] = 0;
-        };
+
+        if (aristas == n - 1) break;
     }
+
     if (aristas == n - 1) return mst_weight;
     else return -1;
 }
@@ -90,18 +90,20 @@ int main() {
     
     vector<tuple<int, int, int>> unsorted_edges;
     vector<tuple<int, int, int>> edges;
+    unordered_map<int, int> count_weights;
     unordered_map<tuple<int, int, int>, int, tuple_hash> classified_edges; 
 
     for (int i = 0; i < m; i++) {
         int u, v, w;
         cin >> u >> v >> w;
         unsorted_edges.push_back({w, u, v});
+        count_weights[w]++;
         edges.push_back({w, u, v});
     }
 
-    int mst_weight = kruskal_mst_weight(edges, n, classified_edges);
+    int mst_weight = kruskalMST(edges, n, classified_edges, count_weights);
 
-    cout << mst_weight << endl;
+    cout << "Peso del MST: " << mst_weight << endl;
 
     for (auto [w, u, v] : unsorted_edges) {
         cout << w << ": " << classify_names[classified_edges[{w, u ,v}]] << endl;
