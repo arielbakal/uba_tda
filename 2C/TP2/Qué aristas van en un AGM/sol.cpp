@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <tuple>
 #include <unordered_map>
-#include <string>
 #include <map>
+#include <functional>
 
 using namespace std;
 
@@ -49,82 +49,82 @@ public:
     }
 };
 
-// vector<pair<int, int>> tarjan(const vector<vector<int>>& adj, int n) {
-//     vector<int> ids(n, -1), low(n, -1);
-//     vector<bool> visited(n, false);
-//     vector<pair<int, int>> bridges;
-//     int time = 0;
+vector<pair<int, int>> tarjan(const vector<vector<int>>& adj, int n) {
+    vector<int> ids(n, -1), low(n, -1);
+    vector<bool> visited(n, false);
+    vector<pair<int, int>> bridges;
+    int time = 0;
 
-//     // Función DFS para encontrar puentes
-//     function<void(int, int)> dfs = [&](int u, int parent) {
-//         visited[u] = true;
-//         ids[u] = low[u] = time++;
+    // Función DFS para encontrar puentes
+    function<void(int, int)> dfs = [&](int u, int parent) {
+        visited[u] = true;
+        ids[u] = low[u] = time++;
 
-//         // Recorremos todos los vecinos de u
-//         for (int v : adj[u]) {
-//             if (v == parent) continue;  // Ignoramos la arista de vuelta al padre
+        // Recorremos todos los vecinos de u
+        for (int v : adj[u]) {
+            if (v == parent) continue;  // Ignoramos la arista de vuelta al padre
 
-//             if (!visited[v]) {
-//                 dfs(v, u);
-//                 low[u] = min(low[u], low[v]);
+            if (!visited[v]) {
+                dfs(v, u);
+                low[u] = min(low[u], low[v]);
 
-//                 // Si low[v] > ids[u], entonces (u, v) es un puente
-//                 if (low[v] > ids[u]) {
-//                     bridges.push_back({u, v});
-//                 }
-//             } else {
-//                 low[u] = min(low[u], ids[v]);
+                // Si low[v] > ids[u], entonces (u, v) es un puente
+                if (low[v] > ids[u]) {
+                    bridges.push_back({u, v});
+                }
+            } else {
+                low[u] = min(low[u], ids[v]);
+            }
+        }
+    };
+
+    // Recorrer cada nodo que no ha sido visitado
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            dfs(i, -1);
+        }
+    }
+
+    return bridges;
+}
+
+// bool dfs_path_tracking(int u, int parent, vector<bool>& visited, vector<int>& path, vector<pair<int, int>>& cycle_edges, vector<vector<int>>& graph) {
+//     visited[u] = true;
+//     path.push_back(u);
+
+//     for (int v : graph[u]) {
+//         if (!visited[v]) {
+//             if (dfs_path_tracking(v, u, visited, path, cycle_edges, graph)) {
+//                 return true;
 //             }
-//         }
-//     };
-
-//     // Recorrer cada nodo que no ha sido visitado
-//     for (int i = 0; i < n; i++) {
-//         if (!visited[i]) {
-//             dfs(i, -1);
+//         } else if (v != parent) {
+//             // encontramos un ciclo
+//             int i = path.size() - 1;
+//             while (path[i] != v) {
+//                 cycle_edges.push_back({path[i - 1], path[i]});
+//                 i--;
+//             }
+//             cycle_edges.push_back({u, v});
+//             return true;
 //         }
 //     }
 
-//     return bridges;
+//     path.pop_back();
+//     return false;
 // }
 
-bool dfs_path_tracking(int u, int parent, vector<bool>& visited, vector<int>& path, vector<pair<int, int>>& cycle_edges, vector<vector<int>>& graph) {
-    visited[u] = true;
-    path.push_back(u);
+// vector<pair<int, int>> findCycle(int n, vector<bool>& visited, vector<int>& path, vector<pair<int, int>>& cycle_edges, vector<vector<int>> graph) {
+//     visited.assign(n, false);
+//     path.clear();
+//     cycle_edges.clear();
 
-    for (int v : graph[u]) {
-        if (!visited[v]) {
-            if (dfs_path_tracking(v, u, visited, path, cycle_edges, graph)) {
-                return true;
-            }
-        } else if (v != parent) {
-            // encontramos un ciclo
-            int i = path.size() - 1;
-            while (path[i] != v) {
-                cycle_edges.push_back({path[i - 1], path[i]});
-                i--;
-            }
-            cycle_edges.push_back({u, v});
-            return true;
-        }
-    }
-
-    path.pop_back();
-    return false;
-}
-
-vector<pair<int, int>> findCycle(int n, vector<bool>& visited, vector<int>& path, vector<pair<int, int>>& cycle_edges, vector<vector<int>> graph) {
-    visited.assign(n, false);
-    path.clear();
-    cycle_edges.clear();
-
-    for (int i = 0; i < n; i++) {
-        if (!visited[i] && dfs_path_tracking(i, -1, visited, path, cycle_edges, graph)) {
-            break;
-        }
-    }
-    return cycle_edges;
-}
+//     for (int i = 0; i < n; i++) {
+//         if (!visited[i] && dfs_path_tracking(i, -1, visited, path, cycle_edges, graph)) {
+//             break;
+//         }
+//     }
+//     return cycle_edges;
+// }
 
 int kruskalMST(vector<tuple<int, int, int>>& edges, int n,
                unordered_map<tuple<int, int, int>, int, tuple_hash>& classified_edges,
@@ -147,26 +147,23 @@ int kruskalMST(vector<tuple<int, int, int>>& edges, int n,
                     for (auto [rep_w, rep_u, rep_v] : edges) {
                         if (w == rep_w) {
                             if (dsu.findSet(rep_u) != dsu.findSet(rep_v)) { // vemos si la arista puede unir dos disjoint sets,
-                                // si independientemente no forma un ciclo, es ANY
-                                classified_edges[{rep_w, rep_u, rep_v}] = 2;  
+                                // si independientemente no forma un ciclo, es AT LEAST ONE
+                                classified_edges[{rep_w, rep_u, rep_v}] = 1; 
+                                subgraph[rep_u].push_back(rep_v);
+                                subgraph[rep_v].push_back(rep_u); 
                             } else {
                                 // si no, forma un ciclo y es NONE
                                 classified_edges[{rep_w, rep_u, rep_v}] = 0;
                             }
-                            subgraph[rep_u].push_back(rep_v);
-                            subgraph[rep_v].push_back(rep_u);
                         }
 
                     }
                     // verificamos si agregando todas las repetidas formamos algun ciclo y
-                    // las que formen parte de aquel ciclo, son AT LEAST ONE
-                    vector<bool> visited;    
-                    vector<int> path;         
-                    vector<pair<int, int>> cycle_edges;
-                    cycle_edges = findCycle(n, visited, path, cycle_edges, subgraph);
-                    for (const auto& [cycle_u, cycle_v] : cycle_edges) {
-                        classified_edges[{w, cycle_u, cycle_v}] = 1;
-                        classified_edges[{w, cycle_v, cycle_u}] = 1;
+                    // las que sean puentes, son AT LEAST ONE
+                    vector<pair<int, int>> bridges = tarjan(subgraph, n);
+                    for (auto [u_bridge, v_bridge] : bridges) {
+                        classified_edges[{w, u_bridge, v_bridge}] = 2;
+                        classified_edges[{w, v_bridge, u_bridge}] = 2;
                     }
                 }
             } 
