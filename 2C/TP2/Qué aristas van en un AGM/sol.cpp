@@ -88,17 +88,17 @@ public:
 //     return bridges;
 // }
 
-bool dfs(int u, int parent, vector<bool>& visited, vector<int>& path, vector<pair<int, int>>& cycle_edges, vector<vector<int>>& graph) {
+bool dfs_path_tracking(int u, int parent, vector<bool>& visited, vector<int>& path, vector<pair<int, int>>& cycle_edges, vector<vector<int>>& graph) {
     visited[u] = true;
     path.push_back(u);
 
     for (int v : graph[u]) {
         if (!visited[v]) {
-            if (dfs(v, u, visited, path, cycle_edges, graph)) {
+            if (dfs_path_tracking(v, u, visited, path, cycle_edges, graph)) {
                 return true;
             }
         } else if (v != parent) {
-            // Encontramos un ciclo
+            // encontramos un ciclo
             int i = path.size() - 1;
             while (path[i] != v) {
                 cycle_edges.push_back({path[i - 1], path[i]});
@@ -119,7 +119,7 @@ vector<pair<int, int>> findCycle(int n, vector<bool>& visited, vector<int>& path
     cycle_edges.clear();
 
     for (int i = 0; i < n; i++) {
-        if (!visited[i] && dfs(i, -1, visited, path, cycle_edges, graph)) {
+        if (!visited[i] && dfs_path_tracking(i, -1, visited, path, cycle_edges, graph)) {
             break;
         }
     }
@@ -134,7 +134,6 @@ int kruskalMST(vector<tuple<int, int, int>>& edges, int n,
     DSU dsu(n);
     int aristas = 0;
     vector<vector<int>> agm(n + 1);
-    bool done_rep_weight_verification = false;
     int last_rep_weight = -1;
 
     for (auto [w, u, v] : edges) {
@@ -143,33 +142,31 @@ int kruskalMST(vector<tuple<int, int, int>>& edges, int n,
             if (count_weights[w] > 1) {
                 if (last_rep_weight != w) {
                     last_rep_weight = w;
-                    if (!done_rep_weight_verification) {
-                        vector<vector<int>> subgraph;
-                        subgraph.assign(agm.begin(), agm.end());
-                        for (auto [rep_w, rep_u, rep_v] : edges) {
-                            if (w == rep_w) {
-                                if (dsu.findSet(rep_u) != dsu.findSet(rep_v)) { // vemos si la arista puede unir dos disjoint sets,
-                                    // si independientemente no forma un ciclo, es ANY
-                                    classified_edges[{rep_w, rep_u, rep_v}] = 2;  
-                                } else {
-                                    // si no, forma un ciclo y es NONE
-                                    classified_edges[{rep_w, rep_u, rep_v}] = 0;
-                                }
-                                subgraph[rep_u].push_back(rep_v);
-                                subgraph[rep_v].push_back(rep_u);
+                    vector<vector<int>> subgraph;
+                    subgraph.assign(agm.begin(), agm.end());
+                    for (auto [rep_w, rep_u, rep_v] : edges) {
+                        if (w == rep_w) {
+                            if (dsu.findSet(rep_u) != dsu.findSet(rep_v)) { // vemos si la arista puede unir dos disjoint sets,
+                                // si independientemente no forma un ciclo, es ANY
+                                classified_edges[{rep_w, rep_u, rep_v}] = 2;  
+                            } else {
+                                // si no, forma un ciclo y es NONE
+                                classified_edges[{rep_w, rep_u, rep_v}] = 0;
                             }
+                            subgraph[rep_u].push_back(rep_v);
+                            subgraph[rep_v].push_back(rep_u);
+                        }
 
-                        }
-                        // verificamos ciclos
-                        vector<bool> visited;     // Vector de nodos visitados
-                        vector<int> path;         // Camino actual de DFS
-                        vector<pair<int, int>> cycle_edges;
-                        cycle_edges = findCycle(n, visited, path, cycle_edges, subgraph);
-                        for (const auto& [cycle_u, cycle_v] : cycle_edges) {
-                            classified_edges[{w, cycle_u, cycle_v}] = 1;
-                            classified_edges[{w, cycle_v, cycle_u}] = 1;
-                        }
-                        done_rep_weight_verification = true;
+                    }
+                    // verificamos si agregando todas las repetidas formamos algun ciclo y
+                    // las que formen parte de aquel ciclo, son AT LEAST ONE
+                    vector<bool> visited;    
+                    vector<int> path;         
+                    vector<pair<int, int>> cycle_edges;
+                    cycle_edges = findCycle(n, visited, path, cycle_edges, subgraph);
+                    for (const auto& [cycle_u, cycle_v] : cycle_edges) {
+                        classified_edges[{w, cycle_u, cycle_v}] = 1;
+                        classified_edges[{w, cycle_v, cycle_u}] = 1;
                     }
                 }
             } 
@@ -219,10 +216,14 @@ int main() {
 
     int mst_weight = kruskalMST(edges, n, classified_edges, count_weights, edges_weight);
 
-    cout << "Peso del MST: " << mst_weight << endl;
+    // cout << "Peso del MST: " << mst_weight << endl;
+
+    // for (auto [w, u, v] : unsorted_edges) {
+    //     cout << w << ": " << classify_names[classified_edges[{w, u ,v}]] << endl;
+    // }
 
     for (auto [w, u, v] : unsorted_edges) {
-        cout << w << ": " << classify_names[classified_edges[{w, u ,v}]] << endl;
+        cout << classify_names[classified_edges[{w, u ,v}]] << endl;
     }
 
     return 0;
