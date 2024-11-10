@@ -126,9 +126,9 @@ vector<pair<int, int>> tarjan(const vector<vector<int>>& adj, int n) {
 //     return cycle_edges;
 // }
 
-int kruskalMST(vector<tuple<int, int, int>>& edges, int n,
+int kruskalMST(vector<tuple<int, int, int>> edges, int n,
                unordered_map<tuple<int, int, int>, int, tuple_hash>& classified_edges,
-               unordered_map<int, int>& count_weights, map<tuple<int, int>, int> edges_weight) {
+               unordered_map<int, int>& count_weights) {
     long long mst_weight = 0;
     sort(edges.begin(), edges.end());
     DSU dsu(n);
@@ -196,22 +196,18 @@ int main() {
     classify_names[1] = "at least one";
     classify_names[2] = "any";
     
-    vector<tuple<int, int, int>> unsorted_edges;
     vector<tuple<int, int, int>> edges;
     unordered_map<int, int> count_weights;
     unordered_map<tuple<int, int, int>, int, tuple_hash> classified_edges; 
-    map<tuple<int, int>, int> edges_weight;
 
     for (int i = 0; i < m; i++) {
         int u, v, w;
         cin >> u >> v >> w;
-        unsorted_edges.push_back({w, u-1, v-1});
-        edges_weight[{u-1, v-1}] = w;
         count_weights[w]++;
         edges.push_back({w, u-1, v-1});
     }
 
-    int mst_weight = kruskalMST(edges, n, classified_edges, count_weights, edges_weight);
+    int mst_weight = kruskalMST(edges, n, classified_edges, count_weights);
 
     // cout << "Peso del MST: " << mst_weight << endl;
 
@@ -219,7 +215,7 @@ int main() {
     //     cout << w << ": " << classify_names[classified_edges[{w, u ,v}]] << endl;
     // }
 
-    for (auto [w, u, v] : unsorted_edges) {
+    for (auto [w, u, v] : edges) {
         cout << classify_names[classified_edges[{w, u ,v}]] << endl;
     }
 
