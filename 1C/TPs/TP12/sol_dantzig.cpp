@@ -50,7 +50,7 @@ int main() {
         for (int i = 0; i < n; i++) {
             cin >> tower_order[i];
         }
-
+    
         vector<vector<int>> modified_power_matrix(n, vector<int>(n));
 
         // We reverse the order of tower_order to prevent destroyed towers to infer in distances in further calculations.
