@@ -18,12 +18,12 @@ void summing_dantzig(vector<vector<int>>& L, int n, vector<long long>& subgraph_
             }
             L[i][k+1] = min_a;
             L[k+1][i] = min_b;
-            subgraph_sum += L[i][k+1] + L[k+1][i];
+            subgraph_sum += min_a + min_b;
         } 
         for (int i=0; i<=k; i++) {
             for (int j=0; j<=k; j++) {
                 L[i][j] = min(L[i][j], L[i][k+1]+L[k+1][j]);
-                if (i!=j) subgraph_sum += L[i][j];
+                subgraph_sum += L[i][j];
             }
         }
         subgraph_k_sum[k] = subgraph_sum;
