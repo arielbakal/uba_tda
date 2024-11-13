@@ -12,7 +12,9 @@
 | 2A: ¿Qué aristas van en un AGM? | [Codeforces](https://codeforces.com/gym/551343/problem/A) | | C++ | Not Implemented |  |
 | 2B: Igna, Martín y la bipartitud | [Codeforces](https://codeforces.com/gym/551343/problem/B) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Inga%2C%20Mart%C3%ADn%20y%20la%20bipartitud/sol.cpp) | C++ | Accepted | 327ms |
 | 2C: Juli y los túneles de Exactas | [Codeforces](https://codeforces.com/gym/551343/problem/C) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Juli%20y%20los%20t%C3%BAneles%20de%20Exactas/sol.cpp) | C++ | Accepted | 358ms |
-
+| 3A: Desarrollo | [Codeforces](https://codeforces.com/gym/562517/problem/A) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP3/Desarrollo/sol.cpp) | C++ | Accepted | 872ms |
+| 3B: Aulas sobrecargadas | [Codeforces](https://codeforces.com/gym/562517/problem/B) |  | C++ | Not Implemented |  |
+| 3C: Seguridad | [Codeforces](https://codeforces.com/gym/562517/problem/C) |  | C++ | Not Implemented |  |
 
 #### 1° Cuatrimestre
 
