@@ -6,6 +6,9 @@
 
 using namespace std;
 
+// Solution: 1) dijkstra saving pred 2) backtrack pred with dfs summing edges (costs) once for each shortest path 3) return total_cost*int32_t
+// Solution2: 1) dijkstra saving pred 2) dfs to create pred tree 3) dfs to sum costs 4) return total_cost*2
+
 long long dijkstra(const vector<vector<pair<int, int>>>& graph, int n, int source) {
     int INF = numeric_limits<int>::max();
     int diff_shortest_paths = 0;
@@ -35,14 +38,9 @@ long long dijkstra(const vector<vector<pair<int, int>>>& graph, int n, int sourc
         }
     }
     
-    // if dist[neighbor] + c == dist[n-1] that means neighbor belogs to a shortest path to n-1
-    for (const auto& [u, c] : graph[n-1]) {
-        if (dist[n-1] == dist[u] + c) {
-            diff_shortest_paths++;
-        }
-    }
+    for ()
     
-    return diff_shortest_paths*dist[n-1];
+    return dist[n-1];
 }
 
 int main() {
