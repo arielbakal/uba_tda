@@ -3,13 +3,11 @@
 #include <vector>
 #include <utility> 
 #include <limits>
+#include <tuple>
 
 using namespace std;
 
-// Solution: 1) dijkstra saving pred 2) backtrack pred with dfs summing edges (costs) once for each shortest path 3) return total_cost*int32_t
-// Solution2: 1) dijkstra saving pred 2) dfs to create pred tree 3) dfs to sum costs 4) return total_cost*2
-
-long long dijkstra(const vector<vector<pair<int, int>>>& graph, int n, int source) {
+vector<long long> dijkstra(const vector<vector<pair<int, int>>>& graph, int n, int source) {
     int INF = numeric_limits<int>::max();
     int diff_shortest_paths = 0;
 
@@ -38,9 +36,23 @@ long long dijkstra(const vector<vector<pair<int, int>>>& graph, int n, int sourc
         }
     }
     
-    for ()
-    
-    return dist[n-1];
+    return dist;
+}
+
+void dfs(int u, int n, vector<bool>& visited, const vector<vector<pair<int, int>>>& graph, const vector<long long>& min_dist, long long& total_cost) {
+    visited[u] = true;
+
+    for (const auto& [v, c] : graph[u]) {
+        if (!visited[v]) {
+            if (min_dist[u] == min_dist[v] + c) {
+                total_cost += c;
+                if (v != 0) {   
+                    dfs(v, n, visited, graph, min_dist, total_cost);
+                }
+            }
+        }   
+        
+    }
 }
 
 int main() {
@@ -52,17 +64,20 @@ int main() {
         // build adj list O(m+n)
         if (v!=w) { // avoid loop edges
             // saving pair<w, c> as a neighbor of v ensures multi-edges handling bc they will be unique in that way
-            // i can easily access c(v,w) also
+            // i can easily access c(v,w) also 
             graph[v].emplace_back(w, c);
             graph[w].emplace_back(v, c);
         }
     }
     // dijkstra impl with binary heap => O((m+n)logn) = O(m.log(n)) since m > n
-    long long all_min_dist = dijkstra(graph, n, 0);
+    vector<long long> all_min_dist = dijkstra(graph, n, 0);
 
-    // return 2*c_0 + 2*c_k + ... + 2*c_n-1 = 2*Σ(c_p) = 2*(shortest path between 0 and n-1) where 0<k<n-1
-    // and k represents the nodes idx from the shortest path between 0 and n-1, then p={0,k....,n-1}
-    cout << 2*all_min_dist;
+    long long total_cost = 0;
+
+    vector<bool> visited(n);
+    dfs(n-1, n, visited, graph, all_min_dist, total_cost);
+
+    cout << total_cost*2 << endl;
 
     return 0;
 }
