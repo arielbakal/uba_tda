@@ -110,12 +110,15 @@ int main() {
     // Ford-Fulkerson costs O(mF) = O(200*(sum b_i)) = O(200*(100*100) = O(2.000.000)
     // Edmonds-Karp costs O(nm^2) = O(100*(200)^2) = O(4.000.000)
     int max_flow = edmonds_karp(s, t, graph, capacity);
-
-    cout << "max flow = " << max_flow << endl;
-    cout << "sum a = " << a_sum << endl;
     
     if (max_flow == a_sum) {
-        cout << "YES";
+        cout << "YES" << endl;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                cout << capacity[n+j+1][i+1] << " ";
+            }   
+            cout << endl;
+        }
     } else {
         cout << "NO";
     }
