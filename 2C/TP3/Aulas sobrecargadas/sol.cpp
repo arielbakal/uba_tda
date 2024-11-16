@@ -57,6 +57,7 @@ int main() {
     int n, m; cin >> n >> m;
 
     int b_sum = 0;
+    int a_sum = 0;
     vector<int> a(n);
     vector<int> b(n);
 
@@ -71,6 +72,7 @@ int main() {
     for (int i=0; i<n; i++) {
         int sub_a; cin >> sub_a;
         a[i] = sub_a;
+        a_sum += sub_a;
         // s -> Ai with cost ai
         graph[s].push_back(i+1);
         graph[i+1].push_back(s);
@@ -107,21 +109,23 @@ int main() {
         capacity[p+n][q] = 0; 
     }
 
-    // Ford-Fulkerson costs O(mF) = O(200*(sum b_i)) = O(200*(100*100) = O(2.000.000)
-    // Edmonds-Karp costs O(nm^2) = O(100*(200)^2) = O(4.000.000)
-    int max_flow = edmonds_karp(s, t, graph, capacity);
-    
-    if (max_flow == b_sum) {
-        cout << "YES" << endl;
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<n; j++) {
-                cout << capacity[n+j+1][i+1] << " ";
-            }   
-            cout << endl;
+    if (a_sum <= b_sum) {
+        int max_flow = edmonds_karp(s, t, graph, capacity);
+        if (max_flow == b_sum) {
+            cout << "YES" << endl;
+            for (int i=0; i<n; i++) {
+                for (int j=0; j<n; j++) {
+                    cout << capacity[n+j+1][i+1] << " ";
+                }   
+                cout << endl;
+            }
+        } else {
+            cout << "NO";
         }
     } else {
         cout << "NO";
     }
+    
 
     return 0;
 }
