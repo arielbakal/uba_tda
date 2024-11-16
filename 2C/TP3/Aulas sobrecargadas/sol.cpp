@@ -81,10 +81,10 @@ int main() {
     for (int i=0; i<n; i++) {
         int sub_b; cin >> sub_b;
         b[i] = sub_b;
-        // Ai -> Ai with cost bi
+        // Ai -> Ai with cost ai
         graph[i+1].push_back(n+(i+1));
         graph[n+(i+1)].push_back(i+1);
-        capacity[i+1][n+(i+1)] = sub_b; 
+        capacity[i+1][n+(i+1)] = a[i]; 
         capacity[n+(i+1)][i+1] = 0; 
         // Ai -> t with cost bi
         graph[n+(i+1)].push_back(t);
@@ -95,11 +95,16 @@ int main() {
 
     for (int i=0; i<m; i++) {
         int p, q; cin >> p >> q;
-        // Ap -> Aq with cost bp 
+        // Ap -> Aq with cost ap 
         graph[p].push_back(q+n);
         graph[q+n].push_back(p);
-        capacity[p][q+n] = b[p-1]; 
+        capacity[p][q+n] = a[p-1]; 
         capacity[q+n][p] = 0; 
+        // Aq -> Ap with cost aq 
+        graph[q].push_back(p+n);
+        graph[p+n].push_back(q);
+        capacity[q][p+n] = a[q-1]; 
+        capacity[p+n][q] = 0; 
     }
 
     // Ford-Fulkerson costs O(mF) = O(200*(sum b_i)) = O(200*(100*100) = O(2.000.000)
