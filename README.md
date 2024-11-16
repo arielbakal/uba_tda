@@ -4,21 +4,21 @@
 
 #### 2° Cuatrimestre
 
-| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo |
+| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo < Límite |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
-| 1A: Aggressive Cows | [SPOJ](https://www.spoj.com/TDA242C1/problems/AGGRCOW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Cows/sol.cpp) | C++ | Accepted | 0.13s |
-| 1B: Black or White | [SPOJ](https://www.spoj.com/TDA242C1/problems/BORW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Black%20or%20White/sol.cpp) | C++ | Accepted | 6.07s |
-| 1C: Busyman | [SPOJ](https://www.spoj.com/TDA242C1/problems/BUSYMAN/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Busyman/sol.cpp) | C++ | Accepted | 0.33s |
+| 1A: Aggressive Cows | [SPOJ](https://www.spoj.com/TDA242C1/problems/AGGRCOW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Cows/sol.cpp) | C++ | Accepted | 130ms < 2000ms |
+| 1B: Black or White | [SPOJ](https://www.spoj.com/TDA242C1/problems/BORW/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Black%20or%20White/sol.cpp) | C++ | Accepted | 6070ms < 9584ms |
+| 1C: Busyman | [SPOJ](https://www.spoj.com/TDA242C1/problems/BUSYMAN/) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP1/Busyman/sol.cpp) | C++ | Accepted | 330ms < 1000ms |
 | 2A: ¿Qué aristas van en un AGM? | [Codeforces](https://codeforces.com/gym/551343/problem/A) | | C++ | Not Implemented |  |
-| 2B: Igna, Martín y la bipartitud | [Codeforces](https://codeforces.com/gym/551343/problem/B) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Inga%2C%20Mart%C3%ADn%20y%20la%20bipartitud/sol.cpp) | C++ | Accepted | 327ms |
-| 2C: Juli y los túneles de Exactas | [Codeforces](https://codeforces.com/gym/551343/problem/C) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Juli%20y%20los%20t%C3%BAneles%20de%20Exactas/sol.cpp) | C++ | Accepted | 358ms |
-| 3A: Desarrollo | [Codeforces](https://codeforces.com/gym/562517/problem/A) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP3/Desarrollo/sol.cpp) | C++ | Accepted | 872ms |
-| 3B: Aulas sobrecargadas | [Codeforces](https://codeforces.com/gym/562517/problem/B) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP3/Aulas%20sobrecargadas/sol.cpp) | C++ | Accepted | 62ms |
-| 3C: Seguridad | [Codeforces](https://codeforces.com/gym/562517/problem/C) | [Solución](https://github.com/arielbakal/uba_tda/tree/main/2C/TP3/Seguridad/sol.cpp) | C++ | Accepted | 625ms |
+| 2B: Igna, Martín y la bipartitud | [Codeforces](https://codeforces.com/gym/551343/problem/B) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Inga%2C%20Mart%C3%ADn%20y%20la%20bipartitud/sol.cpp) | C++ | Accepted | 327ms < 2000ms |
+| 2C: Juli y los túneles de Exactas | [Codeforces](https://codeforces.com/gym/551343/problem/C) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP2/Juli%20y%20los%20t%C3%BAneles%20de%20Exactas/sol.cpp) | C++ | Accepted | 358ms < 3000ms |
+| 3A: Desarrollo | [Codeforces](https://codeforces.com/gym/562517/problem/A) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP3/Desarrollo/sol.cpp) | C++ | Accepted | 872ms < 3000ms |
+| 3B: Aulas sobrecargadas | [Codeforces](https://codeforces.com/gym/562517/problem/B) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/2C/TP3/Aulas%20sobrecargadas/sol.cpp) | C++ | Accepted | 62ms < 1000ms |
+| 3C: Seguridad | [Codeforces](https://codeforces.com/gym/562517/problem/C) | [Solución](https://github.com/arielbakal/uba_tda/tree/main/2C/TP3/Seguridad/sol.cpp) | C++ | Accepted | 625ms < 2000ms |
 
 #### 1° Cuatrimestre
 
-| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo (<Limite) |
+| TP | Enunciado | Solución | Lenguaje | Estado | Tiempo < Límite |
 |-----|-------------------------------------------------------------------------- |-------------------------------------------------------------------------| - | - | - |
 | 1: Backtracking | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP1/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-11804)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP1/solucion.py) | Python | Accepted | 40ms < 1000ms |
 | 2: Top-Down (PD) | [Enunciado](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP2/enunciado.pdf) ([vjudge](https://vjudge.net/problem/UVA-11790)) | [Solución](https://github.com/arielbakal/uba_tda/blob/main/TPs/TP2/solucion.cpp) | C++ | Accepted | 130ms < 1000ms |
