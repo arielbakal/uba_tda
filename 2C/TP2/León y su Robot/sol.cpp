@@ -2,18 +2,16 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
-#include <limits>
 
 using namespace std;
 
-long long INF = numeric_limits<long long>::max();
+// TODO: no pasa por memory limit, en el priority queue se acumula muchos pesos gigantes
+// y en un punto se excede. Segun chatgpt hay que hacer la idea de sol2.cpp
 
-long long primMST(int n, vector<vector<long long>>& adj, vector<long long>& assigned_node_weight) {
+long long primMST(int n, vector<vector<pair<int, long long>>>& adj, vector<long long>& assigned_node_weight) {
     
     priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
-    
     vector<bool> visited(n, false);
-    
     long long mst_cost = 0;
     
     pq.push({0, 0});
@@ -21,24 +19,29 @@ long long primMST(int n, vector<vector<long long>>& adj, vector<long long>& assi
     while(!pq.empty()){
         auto p = pq.top();
         pq.pop();
-        
+
         long long wt = p.first;  
         int u = p.second; 
-        
+
         if (visited[u] == true){
             continue; 
         }
         
         mst_cost += wt; 
         visited[u] = true; 
+
+        for (auto [v, original_weight] : adj[u]) {
+            if (!visited[v]) {
+                pq.push({min(original_weight, assigned_node_weight[u] + assigned_node_weight[v]);, v});
+            }
+        }
         
         for(int v=0; v<n; v++){
-            if(v!=u && visited[v] == false){
-                pq.push({min(assigned_node_weight[u] + assigned_node_weight[v], adj[u][v]), v});  
+            if (v!=u && !visited[v]) {
+                pq.push({assigned_node_weight[u] + assigned_node_weight[v], v});  
             }
         }
     }
-    
     return mst_cost;  
 }
 
@@ -46,7 +49,7 @@ int main() {
     int n, m; cin >> n >> m;
 
     vector<long long> assigned_node_weight(n);
-    vector<vector<long long>> adj(n, vector<long long>(n, INF));
+    vector<vector<pair<int, long long>>> adj(n);
 
     for (int i=0; i<n; i++) {
         cin >> assigned_node_weight[i];
@@ -55,8 +58,8 @@ int main() {
     for (int i=0; i<m; i++) {
         int x, y; cin >> x >> y;
         long long w; cin >> w;
-        adj[x-1][y-1] = min(adj[x-1][y-1], w);
-        adj[y-1][x-1] = min(adj[y-1][x-1], w);
+        adj[x-1].emplace_back(y-1, w);
+        adj[y-1].emplace_back(x-1, w);
     }
 
     long long mst_cost = primMST(n, adj, assigned_node_weight);
