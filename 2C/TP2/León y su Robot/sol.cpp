@@ -22,7 +22,7 @@ long long primMST(int n, vector<vector<long long>>& adj, vector<long long>& assi
         auto p = pq.top();
         pq.pop();
         
-        int wt = p.first;  
+        long long wt = p.first;  
         int u = p.second; 
         
         if (visited[u] == true){
@@ -53,9 +53,10 @@ int main() {
     }
 
     for (int i=0; i<m; i++) {
-        int x, y, w; cin >> x >> y >> w;
-        adj[x-1][y-1] = w;
-        adj[y-1][x-1] = w;
+        int x, y; cin >> x >> y;
+        long long w; cin >> w;
+        adj[x-1][y-1] = min(adj[x-1][y-1], w);
+        adj[y-1][x-1] = min(adj[y-1][x-1], w);
     }
 
     long long mst_cost = primMST(n, adj, assigned_node_weight);

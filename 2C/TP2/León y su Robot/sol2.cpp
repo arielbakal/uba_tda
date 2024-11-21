@@ -35,7 +35,7 @@ public:
     }
 };
 
-int kruskalMST(vector<tuple<int, int, int>>& edges, int n) {
+long long kruskalMST(vector<tuple<long long, int, int>>& edges, int n) {
     long long mst_weight = 0;
     sort(edges.begin(), edges.end());
     DSU dsu(n);
@@ -57,24 +57,21 @@ int kruskalMST(vector<tuple<int, int, int>>& edges, int n) {
 int main() {
     int n, m; cin >> n >> m;
 
-    vector<long long> assigned_node_weight(n);
-    vector<tuple<int, int, long long>> edges(m);
+    vector<tuple<long long, int, int>> edges;
 
     for (int i=0; i<n; i++) {
-        cin >> assigned_node_weight[i];
+        long long assigned_node_weight; cin >> assigned_node_weight;
+        edges.emplace_back(assigned_node_weight, n, i);
     }
 
     for (int i=0; i<m; i++) {
         int x, y, w; cin >> x >> y >> w;
-        int assigned_cost = assigned_node_weight[x] + assigned_node_weight[y]; 
-        if (assigned_cost > w) {
-            edges.emplace_back(x, y, w);
-        } else {
-            edges.emplace_back(x, y, assigned_cost);
-        }
+        edges.emplace_back(w, x, y);
     }
+
+    long long mst_cost = kruskalMST(edges, n+1);
     
-    long long mst_cost = kruskalMST(edges, n);
+    cout << mst_cost << endl;
 
     return 0;
 }
