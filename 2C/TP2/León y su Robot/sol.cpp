@@ -1,64 +1,52 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <queue>
+#include <limits>
 
 using namespace std;
 
-class DSU {
-    vector<int> rank, parent;
-public:
-    DSU(int n) {
-        rank.resize(n + 1, 0);
-        parent.resize(n + 1);
-        for (int i = 0; i < n + 1; i++) {
-            parent[i] = i;
+long long INF = numeric_limits<long long>::max();
+
+long long primMST(int n, vector<vector<long long>>& adj, vector<long long>& assigned_node_weight) {
+    
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
+    
+    vector<bool> visited(n, false);
+    
+    long long mst_cost = 0;
+    
+    pq.push({0, 0});
+    
+    while(!pq.empty()){
+        auto p = pq.top();
+        pq.pop();
+        
+        int wt = p.first;  
+        int u = p.second; 
+        
+        if (visited[u] == true){
+            continue; 
+        }
+        
+        mst_cost += wt; 
+        visited[u] = true; 
+        
+        for(int v=0; v<n; v++){
+            if(v!=u && visited[v] == false){
+                pq.push({min(assigned_node_weight[u] + assigned_node_weight[v], adj[u][v]), v});  
+            }
         }
     }
-
-    int findSet(int node) {
-        if (node == parent[node]) return node;
-        return parent[node] = findSet(parent[node]);
-    }
-
-    void unionByRank(int u, int v) {
-        int uRepresentative = findSet(u);
-        int vRepresentative = findSet(v);
-        if (uRepresentative == vRepresentative) return;
-        if (rank[uRepresentative] < rank[vRepresentative]) {
-            parent[uRepresentative] = vRepresentative;
-        } else if (rank[uRepresentative] > rank[vRepresentative]) {
-            parent[vRepresentative] = uRepresentative;
-        } else {
-            parent[vRepresentative] = uRepresentative;
-            rank[uRepresentative]++;
-        }
-    }
-};
-
-int kruskalMST(vector<tuple<int, int, int>>& edges, int n) {
-    long long mst_weight = 0;
-    sort(edges.begin(), edges.end());
-    DSU dsu(n);
-    int aristas = 0;
-
-    for (auto [w, u, v] : edges) {
-        if (dsu.findSet(u) != dsu.findSet(v)) {
-            dsu.unionByRank(u, v);
-            mst_weight += w;
-            aristas++;
-        } 
-        if (aristas == n - 1) break;
-    }
-
-    if (aristas == n - 1) return mst_weight;
-    else return -1;
+    
+    return mst_cost;  
 }
 
 int main() {
     int n, m; cin >> n >> m;
 
     vector<long long> assigned_node_weight(n);
-    vector<tuple<int, int, long long>> edges(m);
+    vector<vector<long long>> adj(n, vector<long long>(n, INF));
 
     for (int i=0; i<n; i++) {
         cin >> assigned_node_weight[i];
@@ -66,15 +54,13 @@ int main() {
 
     for (int i=0; i<m; i++) {
         int x, y, w; cin >> x >> y >> w;
-        int assigned_cost = assigned_node_weight[x] + assigned_node_weight[y]; 
-        if (assigned_cost > w) {
-            edges.emplace_back(x, y, w);
-        } else {
-            edges.emplace_back(x, y, assigned_cost);
-        }
+        adj[x-1][y-1] = w;
+        adj[y-1][x-1] = w;
     }
 
-    long long mst_cost = kruskalMST(edges, n);
+    long long mst_cost = primMST(n, adj, assigned_node_weight);
+
+    cout << mst_cost << endl;
 
     return 0;
 }
