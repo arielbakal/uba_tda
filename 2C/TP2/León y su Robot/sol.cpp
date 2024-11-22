@@ -59,7 +59,7 @@ int main() {
     int n, m; cin >> n >> m;
 
     vector<long long> a(n);
-    vector<tuple<long long, int, int>> edges(m);
+    vector<tuple<long long, int, int>> edges(m+n-1);
 
     for (int i=0; i<n; i++) {
         cin >> a[i];
@@ -77,25 +77,43 @@ int main() {
     // we can just keep all edges to u and build the "base" mst for case m=0 where
     // we dont have any special offer edges
 
+    long long max_base_edges = 0;
+    long long base_mst_cost = 0;
     // connect all nodes to the min assigned weight, building the base mst
     for (int i=0; i<n; i++) {
+        long long assigned_edge_weight = a[min_assigned_weight_node] + a[i];
         if (i != min_assigned_weight_node) {
-            edges.emplace_back(a[min_assigned_weight_node] + a[i], min_assigned_weight_node, i);
+            edges.emplace_back(assigned_edge_weight, min_assigned_weight_node, i);
+            base_mst_cost += assigned_edge_weight;
+            if (assigned_edge_weight > max_base_edges) {
+                max_base_edges = assigned_edge_weight;
+            }
         }
     }
 
-    // if we have special offer edges (m>1) add them to the base mst, and let kruskal find if
+    // if we have special offer edges (m>0) add them to the base mst, and let kruskal find if
     // they are really special (they minimize even more the mst)
-    for (int i=0; i<m; i++) {
-        int x, y; cin >> x >> y;
-        long long w; cin >> w;
-        edges.emplace_back(w, x-1, y-1); // re-index to 0
+    if (m>0) {
+        int count_added_edges = 0;
+        for (int i=0; i<m; i++) {
+            int x, y; cin >> x >> y;
+            long long w; cin >> w;
+            if (w < max_base_edges) { // if w < max special edge then we could get a lower mst_cost
+                edges.emplace_back(w, x-1, y-1); // re-index to 0
+                count_added_edges++;
+            }
+        }
+
+        if (count_added_edges>0) {
+            // find mst from base mst + special offer edges
+            long long mst_cost = kruskalMST(edges, n);
+            cout << mst_cost << endl;
+        } else {
+            cout << base_mst_cost << endl;
+        }  
+    } else {
+        cout << base_mst_cost << endl;
     }
-
-    // find mst from base mst + special offer edges
-    long long mst_cost = kruskalMST(edges, n);
-
-    cout << mst_cost << endl;
 
     return 0;
 }
