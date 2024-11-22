@@ -1,68 +1,99 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <queue>
+#include <tuple>
 
 using namespace std;
 
-// TODO: no pasa por memory limit, en el priority queue se acumula muchos pesos gigantes
-// y en un punto se excede. Segun chatgpt hay que hacer la idea de sol2.cpp
-
-long long primMST(int n, vector<vector<pair<int, long long>>>& adj, vector<long long>& assigned_node_weight) {
-    
-    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
-    vector<bool> visited(n, false);
-    long long mst_cost = 0;
-    
-    pq.push({0, 0});
-    
-    while(!pq.empty()){
-        auto p = pq.top();
-        pq.pop();
-
-        long long wt = p.first;  
-        int u = p.second; 
-
-        if (visited[u] == true){
-            continue; 
-        }
-        
-        mst_cost += wt; 
-        visited[u] = true; 
-
-        for (auto [v, original_weight] : adj[u]) {
-            if (!visited[v]) {
-                pq.push({min(original_weight, assigned_node_weight[u] + assigned_node_weight[v]);, v});
-            }
-        }
-        
-        for(int v=0; v<n; v++){
-            if (v!=u && !visited[v]) {
-                pq.push({assigned_node_weight[u] + assigned_node_weight[v], v});  
-            }
+class DSU {
+    vector<int> rank, parent;
+public:
+    DSU(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        for (int i = 0; i < n + 1; i++) {
+            parent[i] = i;
         }
     }
-    return mst_cost;  
+
+    int findSet(int node) {
+        if (node == parent[node]) return node;
+        return parent[node] = findSet(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int uRepresentative = findSet(u);
+        int vRepresentative = findSet(v);
+        if (uRepresentative == vRepresentative) return;
+        if (rank[uRepresentative] < rank[vRepresentative]) {
+            parent[uRepresentative] = vRepresentative;
+        } else if (rank[uRepresentative] > rank[vRepresentative]) {
+            parent[vRepresentative] = uRepresentative;
+        } else {
+            parent[vRepresentative] = uRepresentative;
+            rank[uRepresentative]++;
+        }
+    }
+};
+
+long long kruskalMST(vector<tuple<long long, int, int>>& edges, int n) {
+    long long mst_weight = 0;
+    sort(edges.begin(), edges.end());
+    DSU dsu(n);
+    int aristas = 0;
+
+    for (auto [w, u, v] : edges) {
+        if (dsu.findSet(u) != dsu.findSet(v)) {
+            dsu.unionByRank(u, v);
+            mst_weight += w;
+            aristas++;
+        } 
+        if (aristas == n - 1) break;
+    }
+
+    if (aristas == n - 1) return mst_weight;
+    else return -1;
 }
 
 int main() {
     int n, m; cin >> n >> m;
 
-    vector<long long> assigned_node_weight(n);
-    vector<vector<pair<int, long long>>> adj(n);
+    vector<long long> a(n);
+    vector<tuple<long long, int, int>> edges(m);
 
     for (int i=0; i<n; i++) {
-        cin >> assigned_node_weight[i];
+        cin >> a[i];
     }
 
+    // find min assigned weight node
+    int min_assigned_weight_node = 0;
+    for (int i=0; i<n; i++) {
+        if (a[i] < a[min_assigned_weight_node]) {
+            min_assigned_weight_node = i;
+        }
+    }
+    
+    // since a[u] + a[v] <= a[w] + a[v] for any w!=u and u has min assigned weight,
+    // we can just keep all edges to u and build the "base" mst for case m=0 where
+    // we dont have any special offer edges
+
+    // connect all nodes to the min assigned weight, building the base mst
+    for (int i=0; i<n; i++) {
+        if (i != min_assigned_weight_node) {
+            edges.emplace_back(a[min_assigned_weight_node] + a[i], min_assigned_weight_node, i);
+        }
+    }
+
+    // if we have special offer edges (m>1) add them to the base mst, and let kruskal find if
+    // they are really special (they minimize even more the mst)
     for (int i=0; i<m; i++) {
         int x, y; cin >> x >> y;
         long long w; cin >> w;
-        adj[x-1].emplace_back(y-1, w);
-        adj[y-1].emplace_back(x-1, w);
+        edges.emplace_back(w, x-1, y-1); // re-index to 0
     }
 
-    long long mst_cost = primMST(n, adj, assigned_node_weight);
+    // find mst from base mst + special offer edges
+    long long mst_cost = kruskalMST(edges, n);
 
     cout << mst_cost << endl;
 
